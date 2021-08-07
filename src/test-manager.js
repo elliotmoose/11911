@@ -13,7 +13,7 @@ let createSegment = function(book, chapter, verseStart, verseEnd = null){
     };
 };
 
-userSegments.push(createSegment('psalms', 119, 1, 8));
+userSegments.push(createSegment('psalms', 119, 1, 2));
 
 export let loadSegmentData = function(segment, bible) {
     let segmentData = [];
@@ -30,28 +30,48 @@ export let loadSegmentData = function(segment, bible) {
     return segmentData;
 };
 
-export let delimiters = [' ','.',',',':',';'];
+export let delimiters = [' ','.',',',':',';','\n', '"', '!', '?', '(', ')'];
 
 function isDelimiter(word) {
     return delimiters.indexOf(word) !== -1;
 }
 
 function isWord(token) {
-    return token !== undefined && !isDelimiter(token);
+    return token !== null && token !== undefined && !isDelimiter(token) && token.length !== 0;
+}
+
+function getTokens(text) {
+    let string = '';
+    let output = [];
+
+    for(let char of text) {
+        let isDelimiter = (delimiters.indexOf(char) !== -1);
+        if(isDelimiter) {
+            if(string.length !== 0) output.push(string);
+            string = '';
+            output.push(char);
+        }
+        else {
+            string += char;
+        }
+    }
+
+    if(string.length !== 0) output.push(string);
+
+    return output;
 }
 
 function getWords(text) {
-    return text.split(/(?=[.,:; ])|(?<=[.,:; ])/g).filter(word=>isWord(word));    
+    return getTokens(text).filter(word=>isWord(word));    
 }
 
 export let tokeniseVerse = function(verse, userText, wordIndexOffset) {
-    let referenceTokens = verse.split(/(?=[.,:; ])|(?<=[.,:; ])/g);
-    // let userTokens = userText.split(/(?=[.,:; ])|(?<=[.,:; ])/g);
+    let referenceTokens = getTokens(verse);
     let userWords = getWords(userText);
     
     function preprocess(word) {
         if(!word) return word;
-        return word.replace('"', '').toLowerCase();
+        return word.toLowerCase();
     }
 
     let referenceWord = null;
@@ -61,15 +81,16 @@ export let tokeniseVerse = function(verse, userText, wordIndexOffset) {
     let outputTokens = [];
 
     for(let i=0; i<referenceTokens.length; i++) {
-        let nextReferenceToken=referenceTokens[i];
-        let nextUserWord = userWords[userWordIndex];
+        let nextReferenceToken = preprocess(referenceTokens[i]);
+        let nextUserWord = preprocess(userWords[userWordIndex]);
         
-        if(isWord(nextUserWord)) userWord = preprocess(nextUserWord);
-        if(isWord(nextReferenceToken)) referenceWord = preprocess(nextReferenceToken);
+        if(isWord(nextUserWord)) userWord = nextUserWord;
+        if(isWord(nextReferenceToken)) referenceWord = nextReferenceToken;
 
         let userAttempted = userWordIndex < userWords.length && !(userWords.length === 1 && userWord.length === 0);        
         let isMatch = (userWord === referenceWord);
 
+        
         //we look at a user word until we see a reference WORD that either matches, or mismatches
         //to do this, we need to first make sure the reference word is a word
         //a comparison constitutes an increment
@@ -92,7 +113,7 @@ export let tokeniseVerse = function(verse, userText, wordIndexOffset) {
             match: isMatch,
             userAttempted,
             isDelimiter: isDelimiter(nextReferenceToken),
-        };       
+        };
         
         outputTokens.push(token);
     }

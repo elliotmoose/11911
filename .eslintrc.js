@@ -7,6 +7,7 @@ module.exports = {
     'keyword-spacing': 0,
     'space-infix-ops': 0,
     'curly': 0,
+    'no-shadow': 0,
     'no-trailing-spaces': 0,
     'react-native/no-inline-styles': 0,
   },

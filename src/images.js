@@ -4,6 +4,7 @@ const Images = {
     read: require('../assets/images/read.png'),
     list: require('../assets/images/list.png'),
     settings: require('../assets/images/settings.png'),
+    tick: require('../assets/images/tick.png'),
 }
 
 export default Images;

@@ -1,19 +1,32 @@
+// import { EventEmitter } from "EventEmitter";
+
+import EventEmitter from "react-native/Libraries/vendor/emitter/EventEmitter";
+
 export let userSegments = [
 
 ];
 
+let currentSegment;
 
-let createSegment = function(book, chapter, verseStart, verseEnd = null){
+export let memoryListEventEmitter = new EventEmitter();
+
+export function setCurrentSegment(newCurrentSegment) {
+    currentSegment = newCurrentSegment;
+    memoryListEventEmitter.emit('onSetCurrentSegment', currentSegment);
+}
+
+let createSegment = function(book, chapter, verseStart, verseEnd = null, completionDate = null){
     return {
         book,
         chapter: chapter,
         verseStart: verseStart,
         verseEnd: verseEnd && verseEnd,
+        completionDate,
         toString: ()=> `${book[0].toUpperCase() + book.substring(1)} ${chapter}:${verseStart}${verseEnd == null ? '' : `-${verseEnd}`}`,
     };
 };
 
-userSegments.push(createSegment('psalms', 119, 1, 2));
+userSegments.push(createSegment('psalms', 119, 1, 8), createSegment('psalms', 119, 9, 16, new Date()));
 
 export let loadSegmentData = function(segment, bible) {
     let segmentData = [];
@@ -81,7 +94,8 @@ export let tokeniseVerse = function(verse, userText, wordIndexOffset) {
     let outputTokens = [];
 
     for(let i=0; i<referenceTokens.length; i++) {
-        let nextReferenceToken = preprocess(referenceTokens[i]);
+        let nextReferenceTokenRaw = referenceTokens[i];
+        let nextReferenceToken = preprocess(nextReferenceTokenRaw);
         let nextUserWord = preprocess(userWords[userWordIndex]);
         
         if(isWord(nextUserWord)) userWord = nextUserWord;
@@ -109,7 +123,7 @@ export let tokeniseVerse = function(verse, userText, wordIndexOffset) {
         
 
         let token = {
-            text: nextReferenceToken,
+            text: nextReferenceTokenRaw,
             match: isMatch,
             userAttempted,
             isDelimiter: isDelimiter(nextReferenceToken),

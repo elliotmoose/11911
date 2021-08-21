@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image, KeyboardAvoidingView, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
-import Bible from '../src/bible-manager';
-import Colors from '../src/colors';
-import Fonts from '../src/fonts';
-import Images from '../src/images';
-import { loadSegmentData, tokeniseVerse, userSegments } from '../src/test-manager';
+import Bible from '../bible-manager';
+import Colors from '../colors';
+import Fonts from '../fonts';
+import Images from '../images';
+import { loadSegmentData, memoryListEventEmitter, tokeniseVerse, userSegments } from '../test-manager';
 
-const MemoryScreen = () => {
+const MemoryScreen = ({ navigation }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const insets = useSafeAreaInsets();
 
-    let segment = userSegments[0];
-    let segmentData = loadSegmentData(segment, Bible);
-
+    let [currentSegment, setCurrentSegment] = useState(userSegments[0]);
+    let segmentData = loadSegmentData(currentSegment, Bible);
     let [displayMode, setDisplayMode] = useState('boxHint');
     let [isPeeking, setIsPeeking] = useState(false);
     let [userText, setUserText] = useState('');
@@ -23,6 +22,12 @@ const MemoryScreen = () => {
     let config = {
         peekResetMode: 'segment', //sentence | segment | verse
     };
+
+    useEffect(()=>{
+        memoryListEventEmitter.addListener('onSetCurrentSegment', (newCurrentSegment)=>{
+            setCurrentSegment(newCurrentSegment);
+        });
+    }, []);
 
     let wordIndex = 0;
     let lastVerseLastWordIndex = 0;
@@ -42,8 +47,12 @@ const MemoryScreen = () => {
         }
     }
 
+    function openMemoryList() {
+        navigation.navigate('MemoryList');
+    }
+
     return (
-        <SafeAreaView>
+        <SafeAreaView forceInset={{top: 'always', bottom: 'always'}}>
             <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
             <View style={{ height: '100%' }}>
                 {/* <Text style={{ ...Fonts.h1, textAlign: 'center', marginTop: 12, marginBottom: 8 }}>Word For Word</Text> */}
@@ -52,7 +61,7 @@ const MemoryScreen = () => {
                         <View style={{ paddingHorizontal: 30, paddingBottom: 10 }}>
                             {/* for each verse, we render text */}
                             {segmentData.map((verse, i) => {
-                                return <View style={{ flexDirection: 'row' }}>
+                                return <View style={{ flexDirection: 'row' }} key={`${i}`}>
                                     <Text style={{ ...Fonts.h3, marginRight: 6 }}>{verse.verseNum}</Text>
                                     <Text key={`${i}`} style={{ marginTop: 4, lineHeight: 20, ...Fonts.primary }}>
                                         {tokeniseVerse(verse.text, userText, lastVerseLastWordIndex).map((token, j, arr) => {
@@ -89,7 +98,7 @@ const MemoryScreen = () => {
                     <View style={{position: 'absolute', top: 0, left: 0, right: 0, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.2, shadowColor: Colors.black, shadowRadius: 10, borderTopStartRadius: 20, borderTopEndRadius: 20, height: 100, backgroundColor: 'white'}}/>
                     <View style={{position: 'absolute', top: 100, left: 0, right: 0, height: 100, backgroundColor: 'white'}}/>
                     <View style={{ flexDirection: 'row', height: 30 }}>
-                        <Text style={{ ...Fonts.h2 }}>{segment.toString()}:</Text>
+                        <Text style={{ ...Fonts.h2 }}>{currentSegment.toString()}:</Text>
                         <View style={{ flex: 1 }} />
                         <TouchableOpacity style={{ width: 22, height: 22 }} onPress={togglePeek}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={isPeeking ? Images.eye_off : Images.eye} />
@@ -105,7 +114,7 @@ const MemoryScreen = () => {
                         <TouchableOpacity style={{ width: 22, height: 22, marginRight: 12 }} onPress={togglePeek}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.read} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ width: 22, height: 22 }} onPress={togglePeek}>
+                        <TouchableOpacity style={{ width: 22, height: 22 }} onPress={openMemoryList}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.list} />
                         </TouchableOpacity>
                         <View style={{ flex: 1 }} />

@@ -16,6 +16,8 @@
 		B0B6F0E3DAC5954D367AF578 /* libPods-WordForWord.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47A724731D9E7DDD04220143 /* libPods-WordForWord.a */; };
 		DD72189F9FE14D1F8C646282 /* Sahitya-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C300D0B208EE4FAA8D9B877F /* Sahitya-Regular.ttf */; };
 		F6390B65151842AEB7CAA2CF /* Sahitya-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1977FB3103564E708657003F /* Sahitya-Bold.ttf */; };
+		A9BFE2DD7F944B1D902A8621 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AD5C8A08EEAB4FEE8740DE34 /* Montserrat-Bold.ttf */; };
+		91DF493F164F424CAD3EFC8D /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5FB4D2439A8F48D0BE63E3F4 /* Montserrat-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,8 @@
 		C300D0B208EE4FAA8D9B877F /* Sahitya-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Sahitya-Regular.ttf"; path = "../assets/fonts/Sahitya-Regular.ttf"; sourceTree = "<group>"; };
 		EBD3FB1EBDDB322FDC2A4090 /* libPods-WordForWord-WordForWordTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WordForWord-WordForWordTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		AD5C8A08EEAB4FEE8740DE34 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; name = "Montserrat-Bold.ttf"; path = "../assets/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5FB4D2439A8F48D0BE63E3F4 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; name = "Montserrat-Regular.ttf"; path = "../assets/fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +151,8 @@
 			children = (
 				1977FB3103564E708657003F /* Sahitya-Bold.ttf */,
 				C300D0B208EE4FAA8D9B877F /* Sahitya-Regular.ttf */,
+				AD5C8A08EEAB4FEE8740DE34 /* Montserrat-Bold.ttf */,
+				5FB4D2439A8F48D0BE63E3F4 /* Montserrat-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -260,6 +266,8 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				F6390B65151842AEB7CAA2CF /* Sahitya-Bold.ttf in Resources */,
 				DD72189F9FE14D1F8C646282 /* Sahitya-Regular.ttf in Resources */,
+				A9BFE2DD7F944B1D902A8621 /* Montserrat-Bold.ttf in Resources */,
+				91DF493F164F424CAD3EFC8D /* Montserrat-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,5 +15,21 @@ const Fonts = {
         fontFamily: 'Sahitya', 
         fontSize: 15,
     },
+    alternate: {
+        fontFamily: 'montserrat',
+        fontSize: 16,
+    },
+    verysmall : {
+        fontSize: 10,
+    },
+    small : {
+        fontSize: 13,
+    },
+    medium : {
+        fontSize: 16,
+    },
+    large : {
+        fontSize: 19,
+    },
 }
 export default Fonts;

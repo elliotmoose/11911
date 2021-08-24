@@ -67,7 +67,7 @@ const AddVerseChunkScreen = ({ navigation, currentBible, addVerseChunk}) => {
                         <Text style={{lineHeight: textInputHeight,...Fonts.h2, marginHorizontal: 10}}>:</Text>
                         <LabeledTextInput outlineColor={validateVerseStart ? 'black' : Colors.red} placeholder="Verse" keyboardType="numeric" style={{width: 40}} onChangeText={(text)=>setVerseStart(text)}/>
                         <Text style={{height: 20, lineHeight: 20, ...Fonts.h2, marginHorizontal: 6}}>-</Text>
-                        <LabeledTextInput outlineColor={validateVerseEnd ? 'black' : Colors.red} keyboardType="number-pad" style={{width: 40}} onChangeText={(text)=>setVerseEnd(text)}/>
+                        <LabeledTextInput outlineColor={validateVerseEnd ? 'black' : (verseEnd.length == 0) ? Colors.gray : Colors.red} keyboardType="number-pad" style={{width: 40}} onChangeText={(text)=>setVerseEnd(text)}/>
                     </View>
                 </KeyboardAvoidingView>
             </View>

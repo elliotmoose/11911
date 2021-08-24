@@ -38,9 +38,10 @@ const MemoryListScreen = ({ navigation, setCurrentVerseChunk, memoryList }) => {
 
 
 import { setCurrentVerseChunk } from '../redux/verse-chunk/verse-chunk-actions';
+import { memoryListDateSorted } from '../redux/verse-chunk/verse-chunk-selectors';
 
 const mapStateToProps = (state) => ({
-    memoryList: state.verseChunk.memoryList,
+    memoryList: memoryListDateSorted(state),
 });
 const mapDispatchToProps = {
     setCurrentVerseChunk

@@ -10,5 +10,6 @@ module.exports = {
     'no-shadow': 0,
     'no-trailing-spaces': 0,
     'react-native/no-inline-styles': 0,
+    'avoidEscape': true,
   },
 };

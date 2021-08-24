@@ -4,24 +4,29 @@ import { NavigationContainer } from '@react-navigation/native';
 import MemoryListScreen from './src/screens/memory-list-screen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MemoryScreen from './src/screens/memory-screen';
-
+import AddVerseChunkScreen from './src/screens/add-verse-chunk-screen';
+import { Provider } from 'react-redux';
+import store from './src/redux/store';
 
 const RootStack = createNativeStackNavigator();
-// const Bible = require('')
+
 const App = () => {
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-          <RootStack.Navigator screenOptions={{headerShown: false, contentStyle: {backgroundColor: 'white'}}}>
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <RootStack.Navigator screenOptions={{ headerShown: false, contentStyle: { backgroundColor: 'white' } }}>
             <RootStack.Group>
-              <RootStack.Screen name="Memory" component={MemoryScreen}/>
+              <RootStack.Screen name="Memory" component={MemoryScreen} />
             </RootStack.Group>
             <RootStack.Group screenOptions={{ presentation: 'modal' }}>
-              <RootStack.Screen name="MemoryList" component={MemoryListScreen}/>
+              <RootStack.Screen name="MemoryList" component={MemoryListScreen} />
+              <RootStack.Screen name="AddVerseChunk" component={AddVerseChunkScreen} />
             </RootStack.Group>
-          </RootStack.Navigator>      
-      </NavigationContainer>      
-    </SafeAreaProvider>
+          </RootStack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </Provider>
   );
 };
 

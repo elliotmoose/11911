@@ -1,21 +1,4 @@
-// import { EventEmitter } from "EventEmitter";
-
-import EventEmitter from "react-native/Libraries/vendor/emitter/EventEmitter";
-
-export let userSegments = [
-
-];
-
-let currentSegment;
-
-export let memoryListEventEmitter = new EventEmitter();
-
-export function setCurrentSegment(newCurrentSegment) {
-    currentSegment = newCurrentSegment;
-    memoryListEventEmitter.emit('onSetCurrentSegment', currentSegment);
-}
-
-let createSegment = function(book, chapter, verseStart, verseEnd = null, completionDate = null){
+export let createVerseChunk = function(book, chapter, verseStart, verseEnd = null, completionDate = null){
     return {
         book,
         chapter: chapter,
@@ -26,24 +9,28 @@ let createSegment = function(book, chapter, verseStart, verseEnd = null, complet
     };
 };
 
-userSegments.push(createSegment('psalms', 119, 1, 8), createSegment('psalms', 119, 9, 16, new Date()));
+export let verseChunkTitle = function (verseChunk) {
+    if(!verseChunk) return "";    
+    let { book, chapter, verseStart, verseEnd } = verseChunk;
+    return `${book[0].toUpperCase() + book.substring(1)} ${chapter}:${verseStart}${verseEnd == null ? '' : `-${verseEnd}`}`;
+}
 
-export let loadSegmentData = function(segment, bible) {
-    let segmentData = [];
-    let book = bible[segment.book];
-    let chapter = book[segment.chapter-1];
+export let loadVerseChunkData = function(verseChunk, bible) {
+    let verseChunkData = [];
+    let book = bible[verseChunk.book];
+    let chapter = book[verseChunk.chapter-1];
 
-    for(let i=segment.verseStart-1; i<(segment.verseEnd==null ? segment.verseStart : segment.verseEnd); i++) {
-        segmentData.push({
+    for(let i=verseChunk.verseStart-1; i<(verseChunk.verseEnd==null ? verseChunk.verseStart : verseChunk.verseEnd); i++) {
+        verseChunkData.push({
             text: chapter[i],
             verseNum: i+1,
         });
     }
 
-    return segmentData;
+    return verseChunkData;
 };
 
-export let delimiters = [' ','.',',',':',';','\n', '"', '!', '?', '(', ')'];
+export const delimiters = [' ','.',',',':',';','\n', '"', '!', '?', '(', ')'];
 
 function isDelimiter(word) {
     return delimiters.indexOf(word) !== -1;

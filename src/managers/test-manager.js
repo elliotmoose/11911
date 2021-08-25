@@ -66,7 +66,7 @@ function getWords(text) {
     return getTokens(text).filter(word=>isWord(word));    
 }
 
-export let tokeniseVerse = function(verse, userText, wordIndexOffset) {
+export let tokeniseVerse = function(verse, userText) {
     let referenceTokens = getTokens(verse);
     let userWords = getWords(userText);
     
@@ -78,8 +78,9 @@ export let tokeniseVerse = function(verse, userText, wordIndexOffset) {
     let referenceWord = null;
     let userWord = null;
 
-    let userWordIndex = wordIndexOffset;
+    let userWordIndex = 0;
     let outputTokens = [];
+    let allMatch = true;
 
     for(let i=0; i<referenceTokens.length; i++) {
         let nextReferenceTokenRaw = referenceTokens[i];
@@ -108,6 +109,9 @@ export let tokeniseVerse = function(verse, userText, wordIndexOffset) {
             userWord = null;
             referenceWord = null;
         }
+        else {
+            allMatch = false;
+        }
         
 
         let token = {
@@ -122,3 +126,59 @@ export let tokeniseVerse = function(verse, userText, wordIndexOffset) {
 
     return outputTokens;
 };
+
+export function fuzzyMatch(verse, userText) {
+    let referenceTokens = getTokens(verse);
+    let userWords = getWords(userText);
+    
+    function preprocess(word) {
+        if(!word) return word;
+        return word.toLowerCase();
+    }
+
+    let referenceWord = null;
+    let userWord = null;
+
+    let userWordIndex = 0;
+
+    for(let i=0; i<referenceTokens.length; i++) {
+        let nextReferenceTokenRaw = referenceTokens[i];
+        let nextReferenceToken = preprocess(nextReferenceTokenRaw);
+        let nextUserWord = preprocess(userWords[userWordIndex]);
+        
+        if(isWord(nextUserWord)) userWord = nextUserWord;
+        if(isWord(nextReferenceToken)) referenceWord = nextReferenceToken;
+
+        let isMatch = (userWord === referenceWord);
+
+        
+        //we look at a user word until we see a reference WORD that either matches, or mismatches
+        //to do this, we need to first make sure the reference word is a word
+        //a comparison constitutes an increment
+        //a comparison happens when both are words
+        //IMPLEMENTATION NOTE:
+        //userWord waits for the next reference token
+        if(isWord(nextReferenceToken) && isWord(userWord)) {
+            userWordIndex++;
+        }
+        
+        if(isMatch) {
+            //reset
+            userWord = null;
+            referenceWord = null;
+        }
+        
+        if(!isMatch && !isDelimiter(nextReferenceToken)){
+            return false;
+        }        
+    }
+
+    return true;
+}
+
+// export function tokeniseVerseChunk(verseChunk, userText) {
+//     let userTextTokens = getTokens(userText);
+//     for(let verse of verseChunk) {
+//         let verseTokens = getTokens(verse);
+//     }
+// }

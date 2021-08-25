@@ -7,31 +7,35 @@ import Bible from '../managers/bible-manager';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import Images from '../constants/images';
-import { loadVerseChunkData, memoryListEventEmitter, tokeniseVerse, verseChunkTitle } from '../managers/test-manager';
+import { fuzzyMatch, loadVerseChunkData, memoryListEventEmitter, tokeniseVerse, verseChunkTitle } from '../managers/test-manager';
 import { connect } from 'react-redux';
 
 const MemoryScreen = ({ navigation, currentVerseChunk }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const insets = useSafeAreaInsets();
     
-    let verseChunkData = currentVerseChunk ? loadVerseChunkData(currentVerseChunk, Bible) : [];
-    let [displayMode, setDisplayMode] = useState('boxHint');
+    //TODO: move this into a selector
+    let verseChunkData = currentVerseChunk !== undefined ? loadVerseChunkData(currentVerseChunk, Bible) : [];
+    let [mode, setMode] = useState('practice'); // practice | test
     let [isPeeking, setIsPeeking] = useState(false);
     let [userText, setUserText] = useState('');
+    let [correctVerses, setCorrectVerses] = useState([]);
 
+    let currentVerseNum = verseChunkData[correctVerses.length].verseNum;
     let config = {
-        peekResetMode: 'segment', //sentence | segment | verse
+        peekResetMode: 'verse', //verseChunk (test) | verse (practice)
     };
-
-    let wordIndex = 0;
-    let lastVerseLastWordIndex = 0;
 
     function togglePeek() {
         if (!isPeeking) {
             setIsPeeking(true);
 
             switch (config.peekResetMode) {
-                case 'segment':
+                case 'verseChunk':
+                    setUserText('');
+                    setCorrectVerses([]);
+                    break;
+                case 'verse':
                     setUserText('');
                     break;
             }
@@ -43,6 +47,23 @@ const MemoryScreen = ({ navigation, currentVerseChunk }) => {
 
     function openMemoryList() {
         navigation.navigate('MemoryList');
+    }
+
+    function onChangeText(text) {
+        if(text == " ") {
+            setUserText("");
+            return; //don't add a whitespace at start of line
+        }
+
+        setUserText(text);
+
+        let currentVerseIndex = correctVerses.length;
+        let currentVerse = verseChunkData[currentVerseIndex];
+        if(!currentVerse || !userText) return;
+        if(fuzzyMatch(currentVerse.text, userText)) {
+            correctVerses.push({ text: userText, verseNum: currentVerse.verseNum});
+            setUserText("");
+        }
     }
 
     return (
@@ -58,22 +79,38 @@ const MemoryScreen = ({ navigation, currentVerseChunk }) => {
                                 return <View style={{ flexDirection: 'row' }} key={`${i}`}>
                                     <Text style={{ ...Fonts.h3, marginRight: 6 }}>{verse.verseNum}</Text>
                                     <Text key={`${i}`} style={{ marginTop: 4, lineHeight: 20, ...Fonts.primary }}>
-                                        {tokeniseVerse(verse.text, userText, lastVerseLastWordIndex).map((token, j, arr) => {
+                                        {tokeniseVerse(verse.text, userText).map((token, j, arr) => {
+                                            let currentVerseIndex = correctVerses.length;
+                                            let currentVerse = verseChunkData[currentVerseIndex];
+
                                             let isLastWordInVerse = (j === arr.length - 1);
-                                            if (isLastWordInVerse) lastVerseLastWordIndex = wordIndex;
-                                            if (!token.isDelimiter) wordIndex++; //count the number of words to offset
                                             let tokenBackgroundColor = null;
                                             let tokenTextColor = Colors.text;
-                                            let coverToken = (!token.isDelimiter && displayMode === 'boxHint' && !isPeeking);
-                                            if (coverToken) {
+                                            let isSolved = (i < correctVerses.length);
+
+                                            let isCurrent = (i == correctVerses.length);
+                                            
+                                            let practiceReveal = (mode == 'practice' && (isCurrent || correctVerses.length == 0));
+                                            let testReveal = (mode == 'test');
+                                            let shouldRevealForPeeking = (isPeeking && (practiceReveal || testReveal));
+                                            let revealToken = (token.isDelimiter || shouldRevealForPeeking);
+
+                                            if (!revealToken) {
                                                 tokenTextColor = Colors.hint;
                                                 tokenBackgroundColor = Colors.hint;
+                                                
+                                                if(isSolved) {
+                                                    tokenTextColor = Colors.green;
+                                                    tokenBackgroundColor = Colors.green;
+                                                }
+                                                
+                                                
+                                                if (token.userAttempted && isCurrent) {
+                                                    tokenTextColor = (token.match) ? Colors.green : Colors.red;
+                                                    tokenBackgroundColor = (token.match) ? Colors.green : Colors.red;
+                                                }
                                             }
 
-                                            if (coverToken && token.userAttempted) {
-                                                tokenTextColor = token.match ? Colors.green : Colors.red;
-                                                tokenBackgroundColor = token.match ? Colors.green : Colors.red;
-                                            }
 
                                             return <Text key={`${j}`} style={{ backgroundColor: tokenBackgroundColor, color: tokenTextColor }}>{token.text}</Text>;
                                         })}
@@ -98,12 +135,23 @@ const MemoryScreen = ({ navigation, currentVerseChunk }) => {
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={isPeeking ? Images.eye_off : Images.eye} />
                         </TouchableOpacity>
                     </View>
-                    <TextInput editable={!isPeeking} multiline
-                        placeholder={isPeeking ? 'No typing while peeking :)' : 'Enter verse ...'}
-                        placeholderTextColor={Colors.gray}
-                        onChangeText={(text) => setUserText(text)}
-                        style={{ lineHeight: 20, marginBottom: 10, ...Fonts.primary, flex: 1 }}>{userText}
-                    </TextInput>
+                    <ScrollView>
+                        <View style={{minHeight: '100%'}}>
+                            {correctVerses.map((verse, i)=><View key={`${i}`} style={{flexDirection: 'row'}}>
+                                <Text style={{...Fonts.h3, marginRight: 6, color: Colors.gray}}>{verse.verseNum}</Text>
+                                <Text style={{ marginTop: 4, lineHeight: 20, ...Fonts.primary, color: Colors.gray }}>{verse.text}</Text>
+                            </View>)}
+                            <View style={{flexDirection: 'row', flex: 1}}>
+                                <Text style={{...Fonts.h3, marginRight: 6, color: Colors.gray}}>{currentVerseNum}</Text>
+                                <TextInput editable={!isPeeking} multiline
+                                    placeholder={isPeeking ? 'No typing while peeking :)' : 'Enter verse ...'}
+                                    placeholderTextColor={Colors.gray}
+                                    onChangeText={onChangeText}
+                                    value={userText}
+                                    style={{ lineHeight: 20, marginBottom: 10, ...Fonts.primary, flex: 1}}/>
+                            </View>
+                        </View>
+                    </ScrollView>
                     <View style={{ flexDirection: 'row', height: 22}}>
                         <TouchableOpacity style={{ width: 22, height: 22, marginRight: 12 }} onPress={togglePeek}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.read} />

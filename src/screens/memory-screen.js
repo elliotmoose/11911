@@ -9,6 +9,7 @@ import Fonts from '../constants/fonts';
 import Images from '../constants/images';
 import { fuzzyMatch, loadVerseChunkData, memoryListEventEmitter, tokeniseVerse, verseChunkTitle } from '../managers/test-manager';
 import { connect } from 'react-redux';
+import { capitaliseFirst } from '../helpers/string-helper';
 
 const MemoryScreen = ({ navigation, currentVerseChunk }) => {
     const isDarkMode = useColorScheme() === 'dark';
@@ -21,27 +22,34 @@ const MemoryScreen = ({ navigation, currentVerseChunk }) => {
     let [userText, setUserText] = useState('');
     let [correctVerses, setCorrectVerses] = useState([]);
 
-    let currentVerseNum = verseChunkData[correctVerses.length].verseNum;
-    let config = {
-        peekResetMode: 'verse', //verseChunk (test) | verse (practice)
-    };
+    let currentVerseNum = (correctVerses.length < verseChunkData.length) ? verseChunkData[correctVerses.length].verseNum : -1;
 
     function togglePeek() {
         if (!isPeeking) {
             setIsPeeking(true);
 
-            switch (config.peekResetMode) {
-                case 'verseChunk':
+            switch (mode) {
+                case 'test':
                     setUserText('');
                     setCorrectVerses([]);
                     break;
-                case 'verse':
+                case 'practice':
                     setUserText('');
                     break;
             }
         }
         else {
             setIsPeeking(false);
+        }
+    }
+
+    function toggleMode() {
+        let newMode = mode == 'practice' ? 'test' : 'practice';
+        setMode(newMode);
+        setUserText('');
+
+        if(newMode == 'test') {
+            setCorrectVerses([]);
         }
     }
 
@@ -60,9 +68,14 @@ const MemoryScreen = ({ navigation, currentVerseChunk }) => {
         let currentVerseIndex = correctVerses.length;
         let currentVerse = verseChunkData[currentVerseIndex];
         if(!currentVerse || !userText) return;
-        if(fuzzyMatch(currentVerse.text, userText)) {
-            correctVerses.push({ text: userText, verseNum: currentVerse.verseNum});
+        if(fuzzyMatch(currentVerse.text, text)) {
+            correctVerses.push({ text, verseNum: currentVerse.verseNum});
             setUserText("");
+            
+            let completedTest = (correctVerses.length == verseChunkData.length && verseChunkData.length !== 0 && mode == 'test');
+            if(completedTest) {
+                alert('complete!');
+            }
         }
     }
 
@@ -142,7 +155,7 @@ const MemoryScreen = ({ navigation, currentVerseChunk }) => {
                                 <Text style={{ marginTop: 4, lineHeight: 20, ...Fonts.primary, color: Colors.gray }}>{verse.text}</Text>
                             </View>)}
                             <View style={{flexDirection: 'row', flex: 1}}>
-                                <Text style={{...Fonts.h3, marginRight: 6, color: Colors.gray}}>{currentVerseNum}</Text>
+                                <Text style={{...Fonts.h3, marginRight: 6, color: Colors.gray}}>{currentVerseNum == -1 ? '' : currentVerseNum}</Text>
                                 <TextInput editable={!isPeeking} multiline
                                     placeholder={isPeeking ? 'No typing while peeking :)' : 'Enter verse ...'}
                                     placeholderTextColor={Colors.gray}
@@ -152,16 +165,19 @@ const MemoryScreen = ({ navigation, currentVerseChunk }) => {
                             </View>
                         </View>
                     </ScrollView>
-                    <View style={{ flexDirection: 'row', height: 22}}>
+                    <View style={{ flexDirection: 'row', height: 22, alignItems: 'center'}}>
+                        <TouchableOpacity style={{ width: 22, height: 22, marginRight: 12 }} onPress={togglePeek}>
+                            <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.settings} />
+                        </TouchableOpacity>
                         <TouchableOpacity style={{ width: 22, height: 22, marginRight: 12 }} onPress={togglePeek}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.read} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ width: 22, height: 22 }} onPress={openMemoryList}>
+                        <TouchableOpacity style={{ width: 22, height: 22, marginRight: 12 }} onPress={openMemoryList}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.list} />
                         </TouchableOpacity>
                         <View style={{ flex: 1 }} />
-                        <TouchableOpacity style={{ width: 22, height: 22 }} onPress={togglePeek}>
-                            <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.settings} />
+                        <TouchableOpacity style={{ height: 18, borderRadius: 12, borderWidth: 1, paddingHorizontal: 20, justifyContent: 'center'}} onPress={toggleMode}>
+                            <Text style={{...Fonts.primary, ...Fonts.small, lineHeight: 18}}>{capitaliseFirst(mode)}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

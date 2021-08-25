@@ -2,7 +2,7 @@ import { createVerseChunk } from "../../managers/test-manager";
 import { ADD_VERSE_CHUNK, SET_CURRENT_VERSE_CHUNK } from "./verse-chunk-actions";
 
 const initialState = {
-  memoryList: [createVerseChunk('psalms', 119, 1, 8), createVerseChunk('psalms', 119, 9, 16, new Date())],
+  memoryList: [createVerseChunk('psalms', 119, 11), createVerseChunk('joshua', 1, 8)],
   currentVerseChunk: createVerseChunk('psalms', 119, 1, 8),
 };
 

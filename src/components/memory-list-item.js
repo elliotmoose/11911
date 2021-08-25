@@ -25,7 +25,10 @@ const MemoryListItem = ({
                 </View>
             </View>
             <Text style={{ ...Fonts.primary, height: 50, overflow: 'hidden', marginTop: 8, ...Fonts.small}} numberOfLines={2}>
-                {verses.map((verse, i)=><Text key={`${i}`}>{verse.verseNum} {verse.text}</Text>)}
+                {verses.map((verse, i)=><Text key={`${i}`}>
+                    <Text style={{...Fonts.h3}}>{verse.verseNum} </Text>
+                    <Text>{verse.text}</Text>
+                </Text>)}
             </Text>
         </View>
     </TouchableOpacity>

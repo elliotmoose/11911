@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Image, KeyboardAvoidingView, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
 import Bible from '../managers/bible-manager';
@@ -11,7 +11,7 @@ import { fuzzyMatch, loadVerseChunkData, memoryListEventEmitter, tokeniseVerse, 
 import { connect } from 'react-redux';
 import { capitaliseFirst } from '../helpers/string-helper';
 
-const MemoryScreen = ({ navigation, currentVerseChunk }) => {
+const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const insets = useSafeAreaInsets();
     
@@ -69,12 +69,38 @@ const MemoryScreen = ({ navigation, currentVerseChunk }) => {
         let currentVerse = verseChunkData[currentVerseIndex];
         if(!currentVerse || !userText) return;
         if(fuzzyMatch(currentVerse.text, text)) {
-            correctVerses.push({ text, verseNum: currentVerse.verseNum});
+            let newCorrectVerses = [...correctVerses, { text, verseNum: currentVerse.verseNum}];
+            setCorrectVerses(newCorrectVerses);
             setUserText("");
             
-            let completedTest = (correctVerses.length == verseChunkData.length && verseChunkData.length !== 0 && mode == 'test');
-            if(completedTest) {
-                alert('complete!');
+            let completedVerseChunk = (newCorrectVerses.length == verseChunkData.length && verseChunkData.length !== 0);
+            if(completedVerseChunk) {
+                setUserText('');
+                setCorrectVerses([]);
+
+                if(mode == 'test') {
+                    completeCurrentVerseChunk();
+                    Alert.alert('Test Complete!', `You've completed ${currentVerseChunk.toString()}`, [
+                        {
+                            text: 'Again!',
+                        },
+                        {
+                            text: 'Next Verse',
+                            onPress: ()=>openMemoryList()
+                        },
+                    ])
+                }
+                else if (mode == 'practice') {
+                    Alert.alert('Practice Complete!', "Practice again, or try the test!", [
+                        {
+                            text: 'Practice',
+                        },
+                        {
+                            text: 'Test',
+                            onPress: ()=>setMode('test')
+                        },
+                    ]);                    
+                }
             }
         }
     }
@@ -189,10 +215,12 @@ const MemoryScreen = ({ navigation, currentVerseChunk }) => {
     );
 };
 
+import { completeCurrentVerseChunk } from '../redux/verse-chunk/verse-chunk-actions';
+
 const mapStateToProps = (state) => ({
     currentVerseChunk: state.verseChunk.currentVerseChunk,
 });
-const mapDispatchToProps = (dispatch) => ({
-
-});
+const mapDispatchToProps = {
+    completeCurrentVerseChunk
+}
 export default connect(mapStateToProps, mapDispatchToProps)(MemoryScreen);

@@ -12,10 +12,10 @@ import { createVerseChunk, loadVerseChunkData, userSegments } from '../managers/
 const headerHeight = 35;
 const textInputHeight = 27;
 
-const LabeledTextInput = ({style, placeholder, outlineColor, onChangeText, ...props}) => {
+const LabeledTextInput = ({style, placeholder, outlineColor, onChangeText, autoFocus, ...props}) => {
     return (<View style={{...style}} {...props}>
         <Text style={{...Fonts.primary, ...Fonts.verysmall, color: outlineColor}}>{placeholder}</Text>
-        <TextInput style={{...styles.textInput, borderColor: outlineColor}} onChangeText={onChangeText} />
+        <TextInput style={{...styles.textInput, borderColor: outlineColor}} autoFocus={autoFocus} onChangeText={onChangeText} />
     </View>);
 };
 
@@ -62,7 +62,7 @@ const AddVerseChunkScreen = ({ navigation, currentBible, addVerseChunk}) => {
                 </ScrollView>
                 <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={insets.top}>
                     <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', marginBottom: 24, marginTop: 8}} >
-                        <LabeledTextInput outlineColor={validateBook ? 'black' : Colors.red} autoFocus placeholder="Book" style={{width: 100, marginRight: 20,}} onChangeText={(text)=>setBook(text)}/>
+                        <LabeledTextInput autoFocus outlineColor={validateBook ? 'black' : Colors.red} placeholder="Book" style={{width: 100, marginRight: 20,}} onChangeText={(text)=>setBook(text)}/>
                         <LabeledTextInput outlineColor={validateChapter ? 'black' : Colors.red} placeholder="Chapter" keyboardType="numeric" style={{width: 45}} onChangeText={(text)=>setChapter(text)}/>
                         <Text style={{lineHeight: textInputHeight,...Fonts.h2, marginHorizontal: 10}}>:</Text>
                         <LabeledTextInput outlineColor={validateVerseStart ? 'black' : Colors.red} placeholder="Verse" keyboardType="numeric" style={{width: 40}} onChangeText={(text)=>setVerseStart(text)}/>

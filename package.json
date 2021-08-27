@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.12.1",
     "@react-navigation/core": "^6.0.1",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
@@ -21,7 +22,8 @@
     "react-native-screens": "^3.5.0",
     "react-navigation": "^4.4.4",
     "react-redux": "^7.2.4",
-    "redux": "^4.1.1"
+    "redux": "^4.1.1",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

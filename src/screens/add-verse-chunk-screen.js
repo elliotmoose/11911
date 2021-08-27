@@ -7,7 +7,7 @@ import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import Images from '../constants/images';
 import { bookExists, chapterExists, verseExists } from '../managers/bible-manager';
-import { createVerseChunk, loadVerseChunkData, userSegments } from '../managers/test-manager';
+import { createVerseChunk, loadVerseChunkData, userSegments } from '../helpers/verse-helper';
 
 const headerHeight = 35;
 const textInputHeight = 27;

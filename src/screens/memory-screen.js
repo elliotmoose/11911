@@ -7,14 +7,17 @@ import Bible from '../managers/bible-manager';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import Images from '../constants/images';
-import { fuzzyMatch, loadVerseChunkData, memoryListEventEmitter, tokeniseVerse, verseChunkTitle } from '../managers/test-manager';
+import { fuzzyMatch, loadVerseChunkData, memoryListEventEmitter, tokeniseVerse, verseChunkTitle } from '../helpers/verse-helper';
 import { connect } from 'react-redux';
 import { capitaliseFirst } from '../helpers/string-helper';
 
-const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk }) => {
+const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk, loadMemoryList }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const insets = useSafeAreaInsets();
     
+    useEffect(()=>{
+        loadMemoryList();
+    },[]);
     //TODO: move this into a selector
     let verseChunkData = currentVerseChunk !== undefined ? loadVerseChunkData(currentVerseChunk, Bible) : [];
     let [mode, setMode] = useState('practice'); // practice | test
@@ -119,10 +122,6 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                                     <Text style={{ ...Fonts.h3, marginRight: 6 }}>{verse.verseNum}</Text>
                                     <Text key={`${i}`} style={{ marginTop: 4, lineHeight: 20, ...Fonts.primary }}>
                                         {tokeniseVerse(verse.text, userText).map((token, j, arr) => {
-                                            let currentVerseIndex = correctVerses.length;
-                                            let currentVerse = verseChunkData[currentVerseIndex];
-
-                                            let isLastWordInVerse = (j === arr.length - 1);
                                             let tokenBackgroundColor = null;
                                             let tokenTextColor = Colors.text;
                                             let isSolved = (i < correctVerses.length);
@@ -165,10 +164,10 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                 <View
                     style={{ flex: 1, padding: 20, backgroundColor: 'white'}}
                 >   
-                    <View style={{position: 'absolute', top: 0, left: 0, right: 0, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.2, shadowColor: Colors.black, shadowRadius: 10, borderTopStartRadius: 20, borderTopEndRadius: 20, height: 100, backgroundColor: 'white'}}/>
+                    <View style={{position: 'absolute', top: 0, left: 0, right: 0, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.1, shadowColor: Colors.black, shadowRadius: 10, borderTopStartRadius: 30, borderTopEndRadius: 30, height: 100, backgroundColor: 'white'}}/>
                     <View style={{position: 'absolute', top: 100, left: 0, right: 0, height: 100, backgroundColor: 'white'}}/>
                     <View style={{ flexDirection: 'row', height: 30 }}>
-                        <Text style={{ ...Fonts.h2 }}>{verseChunkTitle(currentVerseChunk)}:</Text>
+                        <Text style={{ ...Fonts.h2 }}>{verseChunkTitle(currentVerseChunk)}</Text>
                         <View style={{ flex: 1 }} />
                         <TouchableOpacity style={{ width: 22, height: 22 }} onPress={togglePeek}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={isPeeking ? Images.eye_off : Images.eye} />
@@ -215,12 +214,13 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
     );
 };
 
-import { completeCurrentVerseChunk } from '../redux/verse-chunk/verse-chunk-actions';
+import { completeCurrentVerseChunk, loadMemoryList } from '../redux/verse-chunk/verse-chunk-actions';
 
 const mapStateToProps = (state) => ({
     currentVerseChunk: state.verseChunk.currentVerseChunk,
 });
 const mapDispatchToProps = {
-    completeCurrentVerseChunk
+    completeCurrentVerseChunk,
+    loadMemoryList
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MemoryScreen);

@@ -1,6 +1,7 @@
 import { Alert } from "react-native";
-import { createVerseChunk } from "../../managers/test-manager";
-import { ADD_VERSE_CHUNK, LOAD_DATA, SET_CURRENT_VERSE_CHUNK, COMPLETE_CURRENT_VERSE_CHUNK } from "./verse-chunk-actions";
+import { createVerseChunk } from "../../helpers/verse-helper";
+import { loadMemoryList } from "../../managers/storage-manager";
+import { ADD_VERSE_CHUNK, LOAD_DATA, SET_CURRENT_VERSE_CHUNK, COMPLETE_CURRENT_VERSE_CHUNK, SET_MEMORY_LIST } from "./verse-chunk-actions";
 
 const initialState = {
 	memoryList: [createVerseChunk('psalms', 119, 11), createVerseChunk('joshua', 1, 8)],
@@ -25,8 +26,8 @@ function indexOfVerseChunk(memoryList, verseChunk) {
 
 export default (state = initialState, action) => {
 	switch (action.type) {
-		case LOAD_DATA: 
-			return state;
+		case SET_MEMORY_LIST:
+			return {...state, memoryList: action.memoryList};
 		case ADD_VERSE_CHUNK:
 			if (action.verseChunk) {
 				if (indexOfVerseChunk(state.memoryList, action.verseChunk) == -1) {

@@ -5,7 +5,7 @@ import Bible from '../managers/bible-manager';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import Images from '../constants/images';
-import { loadVerseChunkData, verseChunkTitle } from '../managers/test-manager';
+import { loadVerseChunkData, verseChunkTitle } from '../helpers/verse-helper';
 
 const capsuleHeight = 18;
 const MemoryListItem = ({
@@ -24,7 +24,7 @@ const MemoryListItem = ({
                     {isComplete && <Image source={Images.tick} style={{tintColor: Colors.darkgreen, resizeMode: 'contain', height: capsuleHeight/2, width: capsuleHeight/2, marginLeft: 4}}/>}
                 </View>
             </View>
-            <Text style={{ ...Fonts.primary, height: 50, overflow: 'hidden', marginTop: 8, ...Fonts.small}} numberOfLines={2}>
+            <Text style={{ ...Fonts.primary, height: 50, overflow: 'hidden', marginTop: 4, ...Fonts.small}} numberOfLines={2}>
                 {verses.map((verse, i)=><Text key={`${i}`}>
                     <Text style={{...Fonts.h3}}>{verse.verseNum} </Text>
                     <Text>{verse.text}</Text>

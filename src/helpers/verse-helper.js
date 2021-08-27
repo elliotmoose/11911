@@ -1,11 +1,11 @@
-export let createVerseChunk = function(book, chapter, verseStart, verseEnd = null, completionDate = null){
+export let createVerseChunk = function(book, chapter, verseStart, verseEnd = null, completionDate = null, dateCreated = new Date()){
     return {
         book,
         chapter: chapter,
         verseStart: verseStart,
         verseEnd: verseEnd && verseEnd,
         completionDate,
-        dateCreated: new Date(),
+        dateCreated,
         toString: ()=> `${book[0].toUpperCase() + book.substring(1)} ${chapter}:${verseStart}${verseEnd == null ? '' : `-${verseEnd}`}`,
     };
 };

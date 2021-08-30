@@ -47,10 +47,10 @@ export let loadVerseChunkData = function(verseChunk, bible) {
 };
 
 export let verseChunkStringData = function(verseChunk, bible) {
-    let verseChunkData = [];
     let book = bible[verseChunk.book];
+    if(!book) return "";
     let chapter = book[verseChunk.chapter-1];
-
+    if(!chapter) return "";    
     let output = ""
     for(let i=verseChunk.verseStart-1; i<(verseChunk.verseEnd==null ? verseChunk.verseStart : verseChunk.verseEnd); i++) {
         output += `${i+1} ${chapter[i]} `;

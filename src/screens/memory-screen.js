@@ -173,7 +173,7 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                     <View style={{ flexDirection: 'row', height: 30 }}>
                         <Text style={{ ...Fonts.h2 }}>{verseChunkTitle(currentVerseChunk)}</Text>
                         <View style={{ flex: 1 }} />
-                        <TouchableOpacity style={{ width: 22, height: 22 }} onPress={togglePeek}>
+                        <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22 }} onPress={togglePeek}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={isPeeking ? Images.eye_off : Images.eye} />
                         </TouchableOpacity>
                     </View>
@@ -195,17 +195,17 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                         </View>
                     </ScrollView>
                     <View style={{ flexDirection: 'row', height: 22, alignItems: 'center'}}>
-                        <TouchableOpacity style={{ width: 22, height: 22, marginRight: 12 }} onPress={togglePeek}>
+                        <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22, marginRight: 12 }} onPress={togglePeek}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.settings} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ width: 22, height: 22, marginRight: 12 }} onPress={openMemoryPacks}>
+                        <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22, marginRight: 12 }} onPress={openMemoryPacks}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.read} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ width: 22, height: 22, marginRight: 12 }} onPress={openMemoryList}>
+                        <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22, marginRight: 12 }} onPress={openMemoryList}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.list} />
                         </TouchableOpacity>
                         <View style={{ flex: 1 }} />
-                        <TouchableOpacity style={{ height: 18, borderRadius: 12, borderWidth: 1, paddingHorizontal: 20, justifyContent: 'center'}} onPress={toggleMode}>
+                        <TouchableOpacity hitSlop={hitslop()} style={{ height: 18, borderRadius: 12, borderWidth: 1, paddingHorizontal: 20, justifyContent: 'center'}} onPress={toggleMode}>
                             <Text style={{...Fonts.primary, ...Fonts.small, lineHeight: 18}}>{capitaliseFirst(mode)}</Text>
                         </TouchableOpacity>
                     </View>
@@ -219,6 +219,7 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
 };
 
 import { completeCurrentVerseChunk, loadMemoryList } from '../redux/verse-chunk/verse-chunk-actions';
+import { hitslop } from '../helpers/ui-helper';
 
 const mapStateToProps = (state) => ({
     currentVerseChunk: state.verseChunk.currentVerseChunk,

@@ -13,7 +13,7 @@ const MemoryPacksScreen = ({ navigation, setCurrentMemoryPack, memoryPacks }) =>
     }
 
     function onCreateMemoryPackPressed() {
-        navigation.navigate('CreateMemoryPack');
+        navigation.navigate('AddMemoryPack');
     }
 
     return (

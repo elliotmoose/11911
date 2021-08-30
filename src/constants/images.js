@@ -6,6 +6,8 @@ const Images = {
     settings: require('../../assets/images/settings.png'),
     tick: require('../../assets/images/tick.png'),
     bookmark: require('../../assets/images/bookmark.png'),
+    add: require('../../assets/images/add.png'),
+    remove: require('../../assets/images/remove.png'),
 }
 
 export default Images;

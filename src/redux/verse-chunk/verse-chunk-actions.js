@@ -1,6 +1,6 @@
 import StorageManager from '../../managers/storage-manager';
 import { memoryList } from './verse-chunk-selectors';
-export const [ADD_VERSE_CHUNK, SET_CURRENT_VERSE_CHUNK, COMPLETE_CURRENT_VERSE_CHUNK, SET_MEMORY_LIST] = ['ADD_VERSE_CHUNK', 'SET_CURRENT_VERSE_CHUNK', 'COMPLETE_CURRENT_VERSE_CHUNK', 'SET_MEMORY_LIST'];
+export const [ADD_VERSE_CHUNK, SET_CURRENT_VERSE_CHUNK, SET_CURRENT_MEMORY_PACK, COMPLETE_CURRENT_VERSE_CHUNK, SET_MEMORY_LIST] = ['ADD_VERSE_CHUNK', 'SET_CURRENT_VERSE_CHUNK', 'SET_CURRENT_MEMORY_PACK', 'COMPLETE_CURRENT_VERSE_CHUNK', 'SET_MEMORY_LIST'];
 
 export function loadMemoryList() {
   return async function (dispatch, getState) {
@@ -37,3 +37,12 @@ export const setCurrentVerseChunk = (verseChunk) => ({
   type: SET_CURRENT_VERSE_CHUNK,
   verseChunk,
 });
+
+export function setCurrentMemoryPack() {
+  return async function (dispatch, getState) {
+    dispatch({
+      type: SET_CURRENT_MEMORY_PACK,
+      verseChunk,
+    });
+  }
+}

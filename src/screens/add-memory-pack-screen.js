@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Alert, Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -7,7 +7,7 @@ import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import Images from '../constants/images';
 import { bookExists, chapterExists, verseExists } from '../managers/bible-manager';
-import { createVerseChunk, loadVerseChunkData, userSegments } from '../helpers/verse-helper';
+import { createVerseChunk, loadVerseChunkData } from '../helpers/verse-helper';
 import VerseChunkSelector from '../components/verse-chunk-selector';
 
 const headerHeight = 35;
@@ -20,23 +20,29 @@ const LabeledTextInput = ({style, placeholder, outlineColor, onChangeText, autoF
     </View>);
 };
 
-const AddVerseChunkScreen = ({ navigation, currentBible, addVerseChunk}) => {
+const AddMemoryPackScreen = ({ navigation, currentBible, addVerseChunk}) => {
     const insets = useSafeAreaInsets();
-    const [ selectedVerseChunk, setSelectedVerseChunk ] = useState(null);
-    
-    let verses = selectedVerseChunk ? loadVerseChunkData(selectedVerseChunk, currentBible) : [];
+    let [book, setBook] = useState("");
+    let [chapter, setChapter] = useState("");
+    let [verseStart, setVerseStart] = useState("");
+    let [verseEnd, setVerseEnd] = useState("");
 
-    function onChangeVerseChunk(verseChunk) {
-        setSelectedVerseChunk(verseChunk);
+    const [ selectedVerseChunk, setSelectedVerseChunk ] = useState(null);
+
+    let validateBook = bookExists(currentBible, book);
+    let validateChapter = chapterExists(currentBible, book, chapter);
+    let validateVerseStart = verseExists(currentBible, book, chapter, verseStart);
+    let validateVerseEnd = verseExists(currentBible, book, chapter, verseEnd);
+    
+    let verses = [];
+    if(validateBook && validateChapter && validateVerseStart) {
+        let verseChunk = createVerseChunk(book.toLowerCase(), parseInt(chapter), parseInt(verseStart), validateVerseEnd ? parseInt(verseEnd) : undefined);
+        verses = loadVerseChunkData(verseChunk, currentBible);
     }
 
     function onPressAdd() {
-        if(!selectedVerseChunk) {
-            Alert.alert('Invalid Verse', 'Please enter a verse that exists');
-            return;
-        }
-        
-        addVerseChunk(selectedVerseChunk);
+        let verseChunk = createVerseChunk(book.toLowerCase(), parseInt(chapter), parseInt(verseStart), validateVerseEnd ? parseInt(verseEnd) : undefined);
+        addVerseChunk(verseChunk);
         navigation.goBack();
     }
 
@@ -56,9 +62,7 @@ const AddVerseChunkScreen = ({ navigation, currentBible, addVerseChunk}) => {
                     </View>
                 </ScrollView>
                 <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={insets.top}>
-                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', marginBottom: 24, marginTop: 8}} >
-                        <VerseChunkSelector onChangeVerseChunk={onChangeVerseChunk}/>
-                    </View>
+                    <VerseChunkSelector/>
                 </KeyboardAvoidingView>
             </View>
         </SafeAreaView>
@@ -87,4 +91,4 @@ const mapDispatchToProps = {
     addVerseChunk
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddVerseChunkScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(AddMemoryPackScreen);

@@ -59,6 +59,10 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
     function openMemoryList() {
         navigation.navigate('MemoryList');
     }
+    
+    function openMemoryPacks() {
+        navigation.navigate('MemoryPacks');
+    }
 
     function onChangeText(text) {
         if(text == " ") {
@@ -194,7 +198,7 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                         <TouchableOpacity style={{ width: 22, height: 22, marginRight: 12 }} onPress={togglePeek}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.settings} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ width: 22, height: 22, marginRight: 12 }} onPress={togglePeek}>
+                        <TouchableOpacity style={{ width: 22, height: 22, marginRight: 12 }} onPress={openMemoryPacks}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.read} />
                         </TouchableOpacity>
                         <TouchableOpacity style={{ width: 22, height: 22, marginRight: 12 }} onPress={openMemoryList}>

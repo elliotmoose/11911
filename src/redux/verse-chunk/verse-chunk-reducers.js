@@ -1,11 +1,13 @@
 import { Alert } from "react-native";
-import { createVerseChunk } from "../../helpers/verse-helper";
+import { createMemoryPack, createVerseChunk } from "../../helpers/verse-helper";
 import { loadMemoryList } from "../../managers/storage-manager";
 import { ADD_VERSE_CHUNK, LOAD_DATA, SET_CURRENT_VERSE_CHUNK, COMPLETE_CURRENT_VERSE_CHUNK, SET_MEMORY_LIST } from "./verse-chunk-actions";
 
 const initialState = {
 	memoryList: [createVerseChunk('psalms', 119, 11), createVerseChunk('joshua', 1, 8)],
 	currentVerseChunk: createVerseChunk('psalms', 119, 1, 8),
+	memoryPacks: [createMemoryPack('The Heart', [createVerseChunk('psalms', 119, 11), createVerseChunk('matthew', 5, 8,null, new Date())])],
+	currentMemoryPack: createVerseChunk('psalms', 119, 1, 8),
 };
 
 function indexOfVerseChunk(memoryList, verseChunk) {

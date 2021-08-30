@@ -9,6 +9,21 @@ export let createVerseChunk = function(book, chapter, verseStart, verseEnd = nul
         toString: ()=> `${book[0].toUpperCase() + book.substring(1)} ${chapter}:${verseStart}${verseEnd == null ? '' : `-${verseEnd}`}`,
     };
 };
+export let createMemoryPack = function(name, verseChunks=[], completionDate = null, dateCreated = new Date()){
+    return {
+        name,
+        verseChunks,
+        completionDate,
+        dateCreated,
+        completionCount: ()=>{
+            let count = 0;
+            for(let verseChunk of verseChunks) {
+                if(verseChunk.completionDate) count++;
+            }
+            return count;
+        },
+    };
+};
 
 export let verseChunkTitle = function (verseChunk) {
     if(!verseChunk) return "";    
@@ -30,6 +45,19 @@ export let loadVerseChunkData = function(verseChunk, bible) {
 
     return verseChunkData;
 };
+
+export let verseChunkStringData = function(verseChunk, bible) {
+    let verseChunkData = [];
+    let book = bible[verseChunk.book];
+    let chapter = book[verseChunk.chapter-1];
+
+    let output = ""
+    for(let i=verseChunk.verseStart-1; i<(verseChunk.verseEnd==null ? verseChunk.verseStart : verseChunk.verseEnd); i++) {
+        output += `${i+1} ${chapter[i]} `;
+    }
+
+    return output;
+}
 
 export const delimiters = [' ','.',',',':',';','\n', '"', '!', '?', '(', ')'];
 

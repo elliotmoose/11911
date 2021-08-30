@@ -7,6 +7,7 @@ import MemoryScreen from './src/screens/memory-screen';
 import AddVerseChunkScreen from './src/screens/add-verse-chunk-screen';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
+import MemoryPacksScreen from './src/screens/memory-packs-screen';
 
 const RootStack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ const App = () => {
             <RootStack.Group screenOptions={{ presentation: 'modal' }}>
               <RootStack.Screen name="MemoryList" component={MemoryListScreen} />
               <RootStack.Screen name="AddVerseChunk" component={AddVerseChunkScreen} />
+              <RootStack.Screen name="MemoryPacks" component={MemoryPacksScreen} />
             </RootStack.Group>
           </RootStack.Navigator>
         </NavigationContainer>

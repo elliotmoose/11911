@@ -6,7 +6,7 @@ import Fonts from '../constants/fonts';
 import Bible, { bookExists, chapterExists, verseExists } from '../managers/bible-manager';
 import { createVerseChunk, loadVerseChunkData } from '../helpers/verse-helper';
 import LabeledTextInput from './labeled-input';
-
+import LabeledPicker from './labeled-picker';
 const textInputHeight = 27;
 
 class VerseChunkSelector extends React.Component{
@@ -57,8 +57,8 @@ class VerseChunkSelector extends React.Component{
         let { verseEnd, validateBook, validateChapter, validateVerseStart, validateVerseEnd } = this.state;
 
         return (
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', marginBottom: 24, marginTop: 8}} >
-                <LabeledTextInput ref={ref=>this.bookTextInput = ref} autoFocus outlineColor={validateBook ? 'black' : Colors.red} placeholder="Book" style={{width: 100, marginRight: 20,}} onChangeText={(text)=>this.onTextInputChange('book', text)}/>
+            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', marginBottom: 24, marginTop: 8}} >                 
+                <LabeledPicker ref={ref=>this.bookTextInput = ref} autoFocus outlineColor={validateBook ? 'black' : Colors.red} placeholder="Book" style={{width: 100, marginRight: 20,}} onChangeText={(text)=>this.onTextInputChange('book', text)}/>
                 <LabeledTextInput ref={ref=>this.chapterTextInput = ref} outlineColor={validateChapter ? 'black' : Colors.red} placeholder="Chapter" keyboardType="numeric" style={{width: 45}} onChangeText={(text)=>this.onTextInputChange('chapter', text)}/>
                 <Text style={{lineHeight: textInputHeight,...Fonts.h2, marginHorizontal: 10}}>:</Text>
                 <LabeledTextInput ref={ref=>this.verseStartTextInput = ref} outlineColor={validateVerseStart ? 'black' : Colors.red} placeholder="Verse" keyboardType="numeric" style={{width: 40}} onChangeText={(text)=>this.onTextInputChange('verseStart', text)}/>

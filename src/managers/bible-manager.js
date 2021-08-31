@@ -2,6 +2,10 @@ let niv = require('../../assets/niv.json');
 
 let Bible = niv;
 
+export function bookNames() {
+    return Object.keys(Bible);
+}
+
 export function bookExists(bible, bookStr) { 
     if(!bookStr) return false;
     let book = bible[bookStr.toLowerCase()];

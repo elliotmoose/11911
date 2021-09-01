@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import MemoryPackItem from '../components/memory-pack-item';
 import Fonts from '../constants/fonts';
 
-const MemoryPacksScreen = ({ navigation, setCurrentMemoryPack, memoryPacks }) => {
+const MemoryPacksScreen = ({ navigation, setCurrent, memoryPacks }) => {
 
     function onSelectMemoryPack(index) {
-        setCurrentMemoryPack(memoryPacks[index]);
+        setCurrent(0, index);
         navigation.goBack();
     }
 
@@ -37,14 +37,14 @@ const MemoryPacksScreen = ({ navigation, setCurrentMemoryPack, memoryPacks }) =>
 };
 
 
-import { setCurrentMemoryPack } from '../redux/verse-chunk/verse-chunk-actions';
+import { setCurrent } from '../redux/verse-chunk/verse-chunk-actions';
 import { memoryPacksDateSorted } from '../redux/verse-chunk/verse-chunk-selectors';
 
 const mapStateToProps = (state) => ({
     memoryPacks: memoryPacksDateSorted(state),
 });
 const mapDispatchToProps = {
-    setCurrentMemoryPack
+    setCurrent
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MemoryPacksScreen);

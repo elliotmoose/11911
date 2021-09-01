@@ -1,6 +1,6 @@
 import StorageManager from '../../managers/storage-manager';
 import { memoryList } from './verse-chunk-selectors';
-export const [ADD_VERSE_CHUNK, SET_CURRENT_VERSE_CHUNK, SET_CURRENT_MEMORY_PACK, COMPLETE_CURRENT_VERSE_CHUNK, SET_MEMORY_LIST] = ['ADD_VERSE_CHUNK', 'SET_CURRENT_VERSE_CHUNK', 'SET_CURRENT_MEMORY_PACK', 'COMPLETE_CURRENT_VERSE_CHUNK', 'SET_MEMORY_LIST'];
+export const [ADD_VERSE_CHUNK, ADD_MEMORY_PACK, SET_CURRENT, COMPLETE_CURRENT_VERSE_CHUNK, SET_MEMORY_LIST] = ['ADD_VERSE_CHUNK', 'ADD_MEMORY_PACK', 'SET_CURRENT', 'COMPLETE_CURRENT_VERSE_CHUNK', 'SET_MEMORY_LIST'];
 
 export function loadMemoryList() {
   return async function (dispatch, getState) {
@@ -23,6 +23,18 @@ export function addVerseChunk(verseChunk) {
   }
 }
 
+export function addMemoryPack(memoryPack) {
+  return async function (dispatch, getState) {
+    await dispatch({
+      type: ADD_MEMORY_PACK,
+      memoryPack,
+    });
+    
+    console.warn('to save memory packs');
+    // await StorageManager.saveMemoryList(memoryList(getState()));
+  }
+}
+
 export function completeCurrentVerseChunk() {
   return async function (dispatch, getState) {
     await dispatch({
@@ -33,16 +45,7 @@ export function completeCurrentVerseChunk() {
   }
 }
 
-export const setCurrentVerseChunk = (verseChunk) => ({
-  type: SET_CURRENT_VERSE_CHUNK,
-  verseChunk,
+export const setCurrent = (verseChunkIndex, memoryPackIndex=null) => ({
+  type: SET_CURRENT,
+  current: {packIndex: memoryPackIndex, verseChunkIndex},
 });
-
-export function setCurrentMemoryPack() {
-  return async function (dispatch, getState) {
-    dispatch({
-      type: SET_CURRENT_MEMORY_PACK,
-      verseChunk,
-    });
-  }
-}

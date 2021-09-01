@@ -19,7 +19,7 @@ export default class LabeledPicker extends React.Component {
                 <RNPickerSelect
                     onValueChange={onChangeText}
                     items={bookNames().map(name=>({label: titleCase(name), value: name}))}
-                    placeholder=""
+                    placeholder={{label: "", value: ""}}
                     style={{inputIOS: {...Fonts.primary, ...Fonts.small, textAlign: 'center'}}}
                     ref={(ref)=>this.picker=ref}
                 />

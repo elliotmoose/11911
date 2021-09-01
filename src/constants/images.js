@@ -8,6 +8,8 @@ const Images = {
     bookmark: require('../../assets/images/bookmark.png'),
     add: require('../../assets/images/add.png'),
     remove: require('../../assets/images/remove.png'),
+    next: require('../../assets/images/next.png'),
+    prev: require('../../assets/images/prev.png'),
 }
 
 export default Images;

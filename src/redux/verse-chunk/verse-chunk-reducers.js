@@ -1,13 +1,12 @@
 import { Alert } from "react-native";
 import { createMemoryPack, createVerseChunk } from "../../helpers/verse-helper";
 import { loadMemoryList } from "../../managers/storage-manager";
-import { ADD_VERSE_CHUNK, LOAD_DATA, SET_CURRENT_VERSE_CHUNK, COMPLETE_CURRENT_VERSE_CHUNK, SET_MEMORY_LIST } from "./verse-chunk-actions";
+import { ADD_VERSE_CHUNK, LOAD_DATA, SET_CURRENT, COMPLETE_CURRENT_VERSE_CHUNK, SET_MEMORY_LIST, ADD_MEMORY_PACK } from "./verse-chunk-actions";
 
 const initialState = {
+	current: {packIndex: null, verseChunkIndex: 0},
 	memoryList: [createVerseChunk('psalms', 119, 11), createVerseChunk('joshua', 1, 8)],
-	currentVerseChunk: createVerseChunk('psalms', 119, 1, 8),
-	memoryPacks: [createMemoryPack('The Heart', [createVerseChunk('psalms', 119, 11), createVerseChunk('matthew', 5, 8,null, new Date())])],
-	currentMemoryPack: createVerseChunk('psalms', 119, 1, 8),
+	memoryPacks: [createMemoryPack('The Heart', [createVerseChunk('jeremiah', 17, 9), createVerseChunk('matthew', 5, 8,null, new Date())])],
 };
 
 function indexOfVerseChunk(memoryList, verseChunk) {
@@ -42,21 +41,31 @@ export default (state = initialState, action) => {
 				}
 			}
 			return state;
-		case SET_CURRENT_VERSE_CHUNK:
-			return { ...state, currentVerseChunk: action.verseChunk };
+		case ADD_MEMORY_PACK:
+			if (action.memoryPack) {
+				let { memoryPacks } = state;
+				let newMemoryPacks = [...memoryPacks, action.memoryPack];
+				return {...state, memoryPacks: newMemoryPacks};
+			}
+			return state;
+		case SET_CURRENT:
+			return { ...state, current: action.current };
 		case COMPLETE_CURRENT_VERSE_CHUNK:
-			let { memoryList } = state;
-			let index = indexOfVerseChunk(memoryList, state.currentVerseChunk);
-			let verseChunkIsInMemoryList = (index != -1);
-			if(verseChunkIsInMemoryList) {
-				let verseChunk = memoryList[index];
-				memoryList[index] = {...verseChunk, completionDate: new Date()};
+			let { memoryList, memoryPacks } = state;
+
+			let { packIndex, verseChunkIndex } = state.verseChunk.current;
+			if(packIndex === null) {				
+				let verseChunk = memoryList[verseChunkIndex];
+				memoryList[verseChunkIndex] = {...verseChunk, completionDate: new Date()};
 				return { ...state, memoryList };
 			}
-			else {				
-				//verse chunk does not exist in list, so we add it
-				memoryList.push(state.currentVerseChunk);
-				return { ...state, memoryList };
+			else {
+				let memoryPack = memoryPacks[packIndex];
+				if(!memoryPack) return state;
+				memoryPack.verseChunks[verseChunkIndex] = {...memoryPack.verseChunks[verseChunkIndex], completionDate: new Date()};
+				let newMemoryPacks = [...memoryPacks]; //copy
+				newMemoryPacks[packIndex] = memoryPack;
+				return {...state, memoryPacks: newMemoryPacks};				
 			}
 		default:
 			return state;

@@ -7,12 +7,12 @@ import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import Images from '../constants/images';
 import { bookExists, chapterExists, verseExists } from '../managers/bible-manager';
-import { createVerseChunk, loadVerseChunkData, verseChunkStringData } from '../helpers/verse-helper';
+import { createMemoryPack, createVerseChunk, loadVerseChunkData, verseChunkStringData } from '../helpers/verse-helper';
 import VerseChunkSelector from '../components/verse-chunk-selector';
 
 const headerHeight = 35;
 
-const AddMemoryPackScreen = ({ navigation, currentBible, addVerseChunk}) => {
+const AddMemoryPackScreen = ({ navigation, currentBible, addMemoryPack}) => {
     const insets = useSafeAreaInsets();
     const verseSelectorRef = React.createRef();
     
@@ -27,8 +27,9 @@ const AddMemoryPackScreen = ({ navigation, currentBible, addVerseChunk}) => {
     }
 
     function onPressAdd() {
-        let verseChunk = createVerseChunk(book.toLowerCase(), parseInt(chapter), parseInt(verseStart), validateVerseEnd ? parseInt(verseEnd) : undefined);
-        addVerseChunk(verseChunk);
+        // let verseChunk = createVerseChunk(book.toLowerCase(), parseInt(chapter), parseInt(verseStart), validateVerseEnd ? parseInt(verseEnd) : undefined);
+        let memoryPack = createMemoryPack(packName, verseChunks);
+        addMemoryPack(memoryPack);
         navigation.goBack();
     }
 
@@ -106,16 +107,16 @@ const AddMemoryPackScreen = ({ navigation, currentBible, addVerseChunk}) => {
     );
 };
 
-import { addVerseChunk, setCurrentMemoryPack } from '../redux/verse-chunk/verse-chunk-actions';
 import LabeledTextInput from '../components/labeled-input';
 import { hitslop } from '../helpers/ui-helper';
+import { addMemoryPack } from '../redux/verse-chunk/verse-chunk-actions';
 
 const mapStateToProps = (state) => ({
     currentBible: state.bible.currentBible
 });
 
 const mapDispatchToProps = {
-    addVerseChunk
+    addMemoryPack
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddMemoryPackScreen);

@@ -7,8 +7,8 @@ import Fonts from '../constants/fonts';
 
 const MemoryPacksScreen = ({ navigation, setCurrent, memoryPacks }) => {
 
-    function onSelectMemoryPack(index) {
-        setCurrent(0, index);
+    function onSelectMemoryPack(memoryPackId) {
+        setCurrent(null, memoryPackId);
         navigation.goBack();
     }
 
@@ -27,7 +27,8 @@ const MemoryPacksScreen = ({ navigation, setCurrent, memoryPacks }) => {
                 </View>
                 <ScrollView>
                     {memoryPacks.map((memoryPack, i) => {
-                        let onPress = ()=>onSelectMemoryPack(i);
+                        let memoryPackId = memoryPack.id;
+                        let onPress = ()=>onSelectMemoryPack(memoryPackId);
                         return (<MemoryPackItem onPress={onPress} memoryPack={memoryPack} key={`${i}`}/>);
                     })}
                 </ScrollView>

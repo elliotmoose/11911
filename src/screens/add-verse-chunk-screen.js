@@ -6,8 +6,7 @@ import { connect } from 'react-redux';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import Images from '../constants/images';
-import { bookExists, chapterExists, verseExists } from '../managers/bible-manager';
-import { createVerseChunk, loadVerseChunkData, userSegments } from '../helpers/verse-helper';
+import { loadVerseChunkData } from '../helpers/verse-helper';
 import VerseChunkSelector from '../components/verse-chunk-selector';
 
 const headerHeight = 35;

@@ -7,8 +7,8 @@ import Fonts from '../constants/fonts';
 
 const MemoryListScreen = ({ navigation, setCurrent, memoryList }) => {
 
-    function onSelectVerseChunk(index) {
-        setCurrent(index);
+    function onSelectVerseChunk(verseChunkId) {
+        setCurrent(verseChunkId);
         navigation.goBack();
     }
 
@@ -27,7 +27,8 @@ const MemoryListScreen = ({ navigation, setCurrent, memoryList }) => {
                 </View>
                 <ScrollView>
                     {memoryList.map((verseChunk, i) => {
-                        let onPress = ()=>onSelectVerseChunk(i);
+                        let verseChunkId = verseChunk.id;
+                        let onPress = ()=>onSelectVerseChunk(verseChunkId);
                         return (<MemoryListItem onPress={onPress} verseChunk={verseChunk} key={`${i}`}/>);
                     })}
                 </ScrollView>

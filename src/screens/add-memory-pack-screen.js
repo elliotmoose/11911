@@ -7,7 +7,7 @@ import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import Images from '../constants/images';
 import { bookExists, chapterExists, verseExists } from '../managers/bible-manager';
-import { createMemoryPack, createVerseChunk, loadVerseChunkData, verseChunkStringData } from '../helpers/verse-helper';
+import { createMemoryPack, createVerseChunk, listToIdObject, loadVerseChunkData, verseChunkStringData } from '../helpers/verse-helper';
 import VerseChunkSelector from '../components/verse-chunk-selector';
 
 const headerHeight = 35;
@@ -17,7 +17,7 @@ const AddMemoryPackScreen = ({ navigation, currentBible, addMemoryPack}) => {
     const verseSelectorRef = React.createRef();
     
     const [ selectedVerseChunk, setSelectedVerseChunk ] = useState(null);
-    const [ verseChunks, setVerseChunks ] = useState([createVerseChunk('psalms', 119,1), createVerseChunk('psalms', 1,2)]);
+    const [ verseChunks, setVerseChunks ] = useState([]);
     const [ packName, setPackName ] = useState("");
     
     let verses = selectedVerseChunk ? loadVerseChunkData(selectedVerseChunk, currentBible) : [];
@@ -27,8 +27,7 @@ const AddMemoryPackScreen = ({ navigation, currentBible, addMemoryPack}) => {
     }
 
     function onPressAdd() {
-        // let verseChunk = createVerseChunk(book.toLowerCase(), parseInt(chapter), parseInt(verseStart), validateVerseEnd ? parseInt(verseEnd) : undefined);
-        let memoryPack = createMemoryPack(packName, verseChunks);
+        let memoryPack = createMemoryPack({name: packName, verseChunks: listToIdObject(verseChunks)});
         addMemoryPack(memoryPack);
         navigation.goBack();
     }

@@ -44,7 +44,13 @@ class VerseChunkSelector extends React.Component{
             this.setState({ validateBook, validateChapter, validateVerseStart, validateVerseEnd });
     
             if(validateBook && validateChapter && validateVerseStart) {
-                let verseChunk = createVerseChunk(book.toLowerCase(), parseInt(chapter), parseInt(verseStart), validateVerseEnd ? parseInt(verseEnd) : undefined);
+                let verseChunk = createVerseChunk({
+                    book: book.toLowerCase(), 
+                    chapter: parseInt(chapter), 
+                    verseStart: parseInt(verseStart), 
+                    verseEnd: validateVerseEnd ? parseInt(verseEnd) : undefined
+                });
+                
                 onChangeVerseChunk(verseChunk);
             }
             else {

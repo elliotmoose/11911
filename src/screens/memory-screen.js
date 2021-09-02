@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Alert, Image, KeyboardAvoidingView, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
+// import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import { SafeAreaView } from 'react-navigation';
 
 import Bible from '../managers/bible-manager';
@@ -11,21 +12,28 @@ import { fuzzyMatch, loadVerseChunkData, memoryListEventEmitter, tokeniseVerse, 
 import { connect } from 'react-redux';
 import { capitaliseFirst } from '../helpers/string-helper';
 
-const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk, loadMemoryList, neighbourVerseChunks, currentPackName }) => {
+const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk, loadStorageToState, neighbourVerseChunks, currentPackName, offsetCurrentVerseChunkIndex }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const insets = useSafeAreaInsets();
     
     useEffect(()=>{
-        loadMemoryList();
+        loadStorageToState();
     },[]);
     //TODO: move this into a selector
-    let verseChunkData = currentVerseChunk !== undefined ? loadVerseChunkData(currentVerseChunk, Bible) : [];
+    let textInputRef = useRef();
+    let verseChunkData = (currentVerseChunk !== undefined && currentVerseChunk !== null) ? loadVerseChunkData(currentVerseChunk, Bible) : [];
     let [mode, setMode] = useState('practice'); // practice | test
-    let [isPeeking, setIsPeeking] = useState(false);
+    let [isPeeking, setIsPeeking] = useState(true);
     let [userText, setUserText] = useState('');
     let [correctVerses, setCorrectVerses] = useState([]);
 
     let currentVerseNum = (correctVerses.length < verseChunkData.length) ? verseChunkData[correctVerses.length].verseNum : -1;
+
+    useEffect(()=>{
+        if(isPeeking) {
+            textInputRef.current.blur();
+        }
+    }, [isPeeking]);
 
     function togglePeek() {
         if (!isPeeking) {
@@ -117,7 +125,6 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
         <SafeAreaView forceInset={{top: 'always', bottom: 'always'}}>
             <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
             <View style={{ height: '100%' }}>
-                {/* <Text style={{ ...Fonts.h1, textAlign: 'center', marginTop: 12, marginBottom: 8 }}>Word For Word</Text> */}
                 <View style={{ flex: 1, marginTop: 30 }}>
                     <ScrollView>
                         <View style={{ paddingHorizontal: 30, paddingBottom: 10 }}>
@@ -166,14 +173,14 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                 </View>
 
                 <View style={{flexDirection: 'row', height: 24, marginBottom: 2, marginHorizontal: 8}}>
-                    <IconButton icon={Images.prev} tintColor={Colors.darkgray} size={6} hitslop={hitslop()}>
+                    <IconButton style={{flex: 1, alignItems: 'flex-start'}} icon={Images.prev} tintColor={Colors.darkgray} size={6} hitslop={hitslop()} onPress={()=>offsetCurrentVerseChunkIndex(1)}>
                         <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginLeft: 7, marginBottom: 2}}>{neighbourVerseChunks?.prev?.toString()}</Text>
                     </IconButton>
-                    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                    <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
                         <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.gray}}>{currentPackName}</Text>
                     </View>
-                    <IconButton icon={Images.next} iconPosition='end' tintColor={Colors.darkgray} size={6}  hitslop={hitslop()}>
-                        <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginRight: 7, marginBottom: 2}}>{neighbourVerseChunks?.prev?.toString()}</Text>
+                    <IconButton style={{flex: 1, alignItems: 'flex-end'}} icon={Images.next} iconPosition='end' tintColor={Colors.darkgray} size={6}  hitslop={hitslop()} onPress={()=>offsetCurrentVerseChunkIndex(-1)}>
+                        <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginRight: 7, marginBottom: 2}}>{neighbourVerseChunks?.next?.toString()}</Text>
                     </IconButton>
                 </View>
                 <View
@@ -196,9 +203,12 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                             </View>)}
                             <View style={{flexDirection: 'row', flex: 1}}>
                                 <Text style={{...Fonts.h3, marginRight: 6, color: Colors.gray}}>{currentVerseNum == -1 ? '' : currentVerseNum}</Text>
-                                <TextInput editable={!isPeeking} multiline
+                                <TextInput multiline
+                                    ref={textInputRef}
+                                    editable={true}
                                     placeholder={isPeeking ? 'No typing while peeking :)' : 'Enter verse ...'}
                                     placeholderTextColor={Colors.gray}
+                                    onFocus={()=>setIsPeeking(false)}
                                     onChangeText={onChangeText}
                                     value={userText}
                                     style={{ lineHeight: 20, marginBottom: 10, ...Fonts.primary, flex: 1}}/>
@@ -229,9 +239,9 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
     );
 };
 
-import { completeCurrentVerseChunk, loadMemoryList } from '../redux/verse-chunk/verse-chunk-actions';
+import { completeCurrentVerseChunk, loadStorageToState, offsetCurrentVerseChunkIndex } from '../redux/verse-chunk/verse-chunk-actions';
 import { hitslop } from '../helpers/ui-helper';
-import { currentPackName, currentVerseChunk, getNeighbourVerseChunks } from '../redux/verse-chunk/verse-chunk-selectors';
+import { currentPackName, currentVerseChunk, getNeighbourVerseChunks, } from '../redux/verse-chunk/verse-chunk-selectors';
 import IconButton from '../components/icon-button';
 
 const mapStateToProps = (state) => ({
@@ -241,6 +251,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = {
     completeCurrentVerseChunk,
-    loadMemoryList
+    loadStorageToState,
+    offsetCurrentVerseChunkIndex
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MemoryScreen);

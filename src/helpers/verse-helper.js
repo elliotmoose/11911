@@ -1,28 +1,52 @@
-export let createVerseChunk = function(book, chapter, verseStart, verseEnd = null, completionDate = null, dateCreated = new Date()){
+import { v4 as uuidv4 } from 'uuid'
+
+export function listToIdObject(list) {
+    if(!list) return {};
+
+    let output = {};
+
+    for(let item of list) {
+        output[item.id] = item;
+    }
+
+    return output;
+}
+export let createVerseChunk = function({id=uuidv4(), book, chapter, verseStart, verseEnd = null, completionDate = null, dateCreated = new Date()}){
     return {
+        id,
         book,
-        chapter: chapter,
-        verseStart: verseStart,
-        verseEnd: verseEnd && verseEnd,
+        chapter,
+        verseStart,
+        verseEnd,
         completionDate,
         dateCreated,
         toString: ()=> `${book[0].toUpperCase() + book.substring(1)} ${chapter}:${verseStart}${verseEnd == null ? '' : `-${verseEnd}`}`,
     };
 };
-export let createMemoryPack = function(name, verseChunks=[], completionDate = null, dateCreated = new Date()){
-    return {
+export let createMemoryPack = function({id=uuidv4(), name, verseChunks={}, completionDate = null, dateCreated = new Date()}){
+
+    let newVerseChunks = {};
+    Object.values(verseChunks).forEach(chunk => newVerseChunks[chunk.id] = createVerseChunk(chunk));
+
+    let newMemoryPack = {
+        id,
         name,
-        verseChunks,
+        verseChunks: newVerseChunks,
         completionDate,
         dateCreated,
+        get nameWithCompletion(){
+            return `${this.name} (${this.completionCount()}/${Object.values(this.verseChunks).length} completed)`;
+        },
         completionCount: ()=>{
             let count = 0;
-            for(let verseChunk of verseChunks) {
+            for(let verseChunk of Object.values(verseChunks)) {
                 if(verseChunk.completionDate) count++;
             }
             return count;
         },
     };
+
+    return newMemoryPack;
 };
 
 export let verseChunkTitle = function (verseChunk) {
@@ -33,8 +57,11 @@ export let verseChunkTitle = function (verseChunk) {
 
 export let loadVerseChunkData = function(verseChunk, bible) {
     let verseChunkData = [];
+    if(!bible) return [];
     let book = bible[verseChunk.book];
+    if(!book) return [];
     let chapter = book[verseChunk.chapter-1];
+    if(!chapter) return [];
 
     for(let i=verseChunk.verseStart-1; i<(verseChunk.verseEnd==null ? verseChunk.verseStart : verseChunk.verseEnd); i++) {
         verseChunkData.push({

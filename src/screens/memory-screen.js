@@ -12,7 +12,7 @@ import { fuzzyMatch, loadVerseChunkData, memoryListEventEmitter, tokeniseVerse, 
 import { connect } from 'react-redux';
 import { capitaliseFirst } from '../helpers/string-helper';
 
-const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk, loadStorageToState, neighbourVerseChunks, currentPackName, offsetCurrentVerseChunkIndex }) => {
+const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk, loadStorageToState, neighbourVerseChunks, currentPack, setCurrent }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const insets = useSafeAreaInsets();
     
@@ -173,13 +173,13 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                 </View>
 
                 <View style={{flexDirection: 'row', height: 24, marginBottom: 2, marginHorizontal: 8}}>
-                    <IconButton style={{flex: 1, alignItems: 'flex-start'}} icon={Images.prev} tintColor={Colors.darkgray} size={6} hitslop={hitslop()} onPress={()=>offsetCurrentVerseChunkIndex(1)}>
+                    <IconButton style={{flex: 1, alignItems: 'flex-start'}} icon={Images.prev} tintColor={Colors.darkgray} size={6} hitslop={hitslop()} onPress={()=>setCurrent(neighbourVerseChunks?.prev?.id, currentPack.id)}>
                         <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginLeft: 7, marginBottom: 2}}>{neighbourVerseChunks?.prev?.toString()}</Text>
                     </IconButton>
                     <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
-                        <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.gray}}>{currentPackName}</Text>
+                        <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.gray}}>{currentPack?.nameWithCompletion}</Text>
                     </View>
-                    <IconButton style={{flex: 1, alignItems: 'flex-end'}} icon={Images.next} iconPosition='end' tintColor={Colors.darkgray} size={6}  hitslop={hitslop()} onPress={()=>offsetCurrentVerseChunkIndex(-1)}>
+                    <IconButton style={{flex: 1, alignItems: 'flex-end'}} icon={Images.next} iconPosition='end' tintColor={Colors.darkgray} size={6}  hitslop={hitslop()} onPress={()=>setCurrent(neighbourVerseChunks?.next?.id, currentPack.id)}>
                         <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginRight: 7, marginBottom: 2}}>{neighbourVerseChunks?.next?.toString()}</Text>
                     </IconButton>
                 </View>
@@ -239,19 +239,19 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
     );
 };
 
-import { completeCurrentVerseChunk, loadStorageToState, offsetCurrentVerseChunkIndex } from '../redux/verse-chunk/verse-chunk-actions';
+import { completeCurrentVerseChunk, loadStorageToState, setCurrent } from '../redux/verse-chunk/verse-chunk-actions';
 import { hitslop } from '../helpers/ui-helper';
-import { currentPackName, currentVerseChunk, getNeighbourVerseChunks, } from '../redux/verse-chunk/verse-chunk-selectors';
+import { currentPack, currentVerseChunk, getNeighbourVerseChunks, } from '../redux/verse-chunk/verse-chunk-selectors';
 import IconButton from '../components/icon-button';
 
 const mapStateToProps = (state) => ({
     currentVerseChunk: currentVerseChunk(state),
     neighbourVerseChunks: getNeighbourVerseChunks(state),
-    currentPackName: currentPackName(state),
+    currentPack: currentPack(state),
 });
 const mapDispatchToProps = {
     completeCurrentVerseChunk,
     loadStorageToState,
-    offsetCurrentVerseChunkIndex
+    setCurrent
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MemoryScreen);

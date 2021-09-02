@@ -43,9 +43,13 @@ export default (state = initialState, action) => {
 		case LOAD_INITIAL_STATE : {
 			let { memoryListPack, userMemoryPacks, current } = action;
 
+			console.log(current);
+			console.log(Object.keys(memoryListPack))
+			console.log(Object.keys(userMemoryPacks))
 			if(!current) {
-				current = { packId: null /** memory list */, verseChunkId: memoryListPack.verseChunks[0]?.id}
+				current = { packId: null /** memory list */, verseChunkId: Object.values(memoryListPack.verseChunks)[0]?.id}
 			}
+
 			
 			return { ...state, memoryListPack, userMemoryPacks, current};
 		}

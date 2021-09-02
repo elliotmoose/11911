@@ -1,5 +1,5 @@
 import StorageManager from '../../managers/storage-manager';
-import { memoryList } from './verse-chunk-selectors';
+import { memoryList, memoryListPack, userMemoryPacks } from './verse-chunk-selectors';
 export const [ADD_VERSE_CHUNK, ADD_MEMORY_PACK, SET_CURRENT, COMPLETE_CURRENT_VERSE_CHUNK, LOAD_INITIAL_STATE] = ['ADD_VERSE_CHUNK', 'ADD_MEMORY_PACK', 'SET_CURRENT', 'COMPLETE_CURRENT_VERSE_CHUNK', 'LOAD_INITIAL_STATE'];
 
 export function loadStorageToState() {
@@ -20,7 +20,7 @@ export function addVerseChunk(verseChunk) {
       verseChunk,
     });
     
-    await StorageManager.saveMemoryList(memoryList(getState()));
+    await StorageManager.saveMemoryList(memoryListPack(getState()));
   }
 }
 
@@ -31,38 +31,7 @@ export function addMemoryPack(memoryPack) {
       memoryPack,
     });
     
-    console.warn('to save memory packs');
-    // await StorageManager.saveMemoryList(memoryList(getState()));
-  }
-}
-
-export function offsetCurrentVerseChunkIndex(offset) {
-  return async function (dispatch, getState) {
-
-    let { current: {packIndex, verseChunkIndex}, memoryList, memoryPacks} = getState().verseChunk;
-
-    let newVerseChunkIndex = verseChunkIndex + offset;
-
-    let min = 0;
-    let max;
-    if(packIndex === null) {
-      max = memoryList.length;
-    }
-    else {
-      memoryPack = memoryPacks[packIndex];
-      max = memoryPack.verseChunks.length;
-    }
-
-    if(newVerseChunkIndex < min) newVerseChunkIndex = max-1;
-    if(newVerseChunkIndex > max) newVerseChunkIndex = 0;
-
-    await dispatch({
-      type: SET_CURRENT,
-      current: {packIndex, verseChunkIndex: newVerseChunkIndex},
-    });
-    
-    console.warn('to save memory packs');
-    // await StorageManager.saveMemoryList(memoryList(getState()));
+    await StorageManager.saveMemoryPacks(userMemoryPacks(getState()));
   }
 }
 
@@ -73,10 +42,17 @@ export function completeCurrentVerseChunk() {
     });
 
     await StorageManager.saveMemoryList(memoryList(getState()));
+    await StorageManager.saveMemoryPacks(userMemoryPacks(getState()));
   }
 }
 
-export const setCurrent = (verseChunkId, packId=null) => ({
-  type: SET_CURRENT,
-  current: {packId, verseChunkId},
-});
+export function setCurrent(verseChunkId, packId=null) {
+  return async function (dispatch, getState) {
+    await dispatch({
+      type: SET_CURRENT,
+      current: { packId, verseChunkId },
+    });
+
+    await StorageManager.saveCurrent(getState().verseChunk.current);
+  }
+}

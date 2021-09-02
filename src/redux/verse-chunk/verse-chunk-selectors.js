@@ -1,7 +1,11 @@
+import { mod } from "../../helpers/math-helper";
+
+function sortedVerseChunkListByCreateDate(list) {
+    return list.sort((a,b)=>new Date(b.dateCreated) - new Date(a.dateCreated));
+}
 export function memoryListDateSorted(state) {
     let memoryList = Object.values(state.verseChunk.memoryListPack.verseChunks);
-    memoryList.sort((a,b)=>new Date(b.dateCreated) - new Date(a.dateCreated));
-    return memoryList;
+    return sortedVerseChunkListByCreateDate(memoryList);
 }
 
 export function memoryPacksDateSorted(state) {
@@ -10,8 +14,11 @@ export function memoryPacksDateSorted(state) {
     return userMemoryPacksList;
 }
 
-export function memoryList(state) {
-    return state.verseChunk.memoryList;
+export function memoryListPack(state) {
+    return state.verseChunk.memoryListPack;
+}
+export function userMemoryPacks(state) {
+    return state.verseChunk.userMemoryPacks;
 }
 
 export function currentVerseChunk(state) {
@@ -31,33 +38,29 @@ export function currentVerseChunk(state) {
 }
 
 export function getNeighbourVerseChunks(state) {
-    console.warn('get neighbour implementation')
-    return {next: null, prev: null}
-    // let { packId, verseChunkId } = state.verseChunk.current;
-    // if(packId === null) {
-    //     let memoryListPack = state.verseChunk.memoryListPack;        
-    //     return {
-    //         next: memoryListPack[verseChunkId-1],
-    //         prev: memoryListPack[verseChunkId+1],
-    //     }
-    // }
-    // else {
-    //     let memoryPack = state.verseChunk.userMemoryPacks[packId];
-    //     return {
-    //         next: memoryPack?.verseChunks[verseChunkId-1],
-    //         prev: memoryPack?.verseChunks[verseChunkId+1],
-    //     }
-    // }
+
+    let { packId, verseChunkId } = state.verseChunk.current;
+    let memoryPack = ((packId === null) ? state.verseChunk.memoryListPack : state.verseChunk.userMemoryPacks[packId]);
+    if(!memoryPack) return {next: null, prev: null};
+    let verseChunkList = sortedVerseChunkListByCreateDate(Object.values(memoryPack.verseChunks));
+
+    if(verseChunkList.length <= 1) return {next: null, prev: null};
+
+    let currentIndex = verseChunkList.findIndex((each)=> each.id == verseChunkId);
+
+    if(currentIndex == -1) return {next: null, prev: null}; 
+
+    let prevIndex = mod(currentIndex-1, verseChunkList.length);
+    let nextIndex = mod(currentIndex+1, verseChunkList.length);
+
+    return {
+        prev: verseChunkList[prevIndex],
+        next: verseChunkList[nextIndex],
+    }
+
 }
 
-export function currentPackName(state) {
+export function currentPack(state) {
     let { packId } = state.verseChunk.current;
-    if(packId === null) return "My Memory List"
-
-    let memoryPack = state.verseChunk.userMemoryPacks[packId];
-    if(!memoryPack) return "";
-    let name = memoryPack.name;
-    let nameLengthLimit = 15;
-    // if(name.length > nameLengthLimit) name = name.slice(0, nameLengthLimit) + "..."
-    return memoryPack.nameWithCompletion;
+    return (packId === null) ? state.verseChunk.memoryListPack : state.verseChunk.userMemoryPacks[packId];
 }

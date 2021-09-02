@@ -13,6 +13,8 @@ target 'WordForWord' do
   )
 
 
+  pod 'react-native-get-random-values', :path => '../node_modules/react-native-get-random-values'
+
   target 'WordForWordTests' do
     inherit! :complete
     # Pods for testing

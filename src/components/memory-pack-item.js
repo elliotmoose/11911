@@ -27,7 +27,7 @@ const MemoryPackItem = ({
             </View>
             <View style={{marginTop: 4}}>
                 {verseChunksList.map((verseChunk, i)=><View key={`${i}`} style={{marginTop: 8, paddingLeft: 14}}>
-                    <Text style={{...Fonts.alternate, ...Fonts.small, color: Colors.gray}}>{i+1}. {verseChunk.toString()}</Text>
+                    <Text style={{...Fonts.alternate, ...Fonts.small, color: verseChunk.completionDate ? Colors.darkgreen : Colors.gray}}>{i+1}. {verseChunk.toString()}</Text>
                     <Text style={{...Fonts.primary, ...Fonts.small}} numberOfLines={2}>{verseChunkStringData(verseChunk, Bible)}</Text>
                 </View>)}
             </View>
@@ -37,20 +37,6 @@ const MemoryPackItem = ({
 
 export default MemoryPackItem;
 
-
-let object = {
-    func() {
-        console.log(this);
-    },
-    arrowfunc: ()=>{
-        console.log(this);
-    },
-}
-
-let { func } = object;
-func(); //undefined
-object.func(); //returns object
-object.arrowfunc(); //undefined
 
 
 

@@ -6,6 +6,14 @@ export default class LabeledTextInput extends React.Component {
     clear() {
         this.textInput.clear();
     }
+    
+    focus() {
+        this.textInput.focus();
+    }
+
+    blur() {
+        this.textInput.blur();
+    }
 
     render()
     {

@@ -40,4 +40,23 @@ export function verseExists(bible, bookStr, chapterStr, verseStr) {
     return true;
 }
 
+export function autocompleteBook(input) {
+    if(input.length == 0) return "";
+    const names = bookNames();
+    let inputProcessed = input.toLowerCase();
+    for(let name of names) {
+        let processedName = name.toLowerCase();
+        let indexSearch = processedName.indexOf(inputProcessed);
+        let match = (indexSearch == 0);        
+        
+        if(match) {
+            let isNumber = !isNaN(parseInt(inputProcessed[0]));
+            if(isNumber && inputProcessed.replace(" ", "").length <= 1) continue;
+            return processedName;
+        }
+    }
+
+    return "";
+}
+
 export default Bible;

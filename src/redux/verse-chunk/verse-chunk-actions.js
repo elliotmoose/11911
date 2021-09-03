@@ -1,5 +1,5 @@
 import StorageManager from '../../managers/storage-manager';
-import { memoryList, memoryListPack, userMemoryPacks } from './verse-chunk-selectors';
+import { memoryListPack, userMemoryPacks } from './verse-chunk-selectors';
 export const [ADD_VERSE_CHUNK, ADD_MEMORY_PACK, SET_CURRENT, COMPLETE_CURRENT_VERSE_CHUNK, LOAD_INITIAL_STATE] = ['ADD_VERSE_CHUNK', 'ADD_MEMORY_PACK', 'SET_CURRENT', 'COMPLETE_CURRENT_VERSE_CHUNK', 'LOAD_INITIAL_STATE'];
 
 export function loadStorageToState() {
@@ -41,7 +41,7 @@ export function completeCurrentVerseChunk() {
       type: COMPLETE_CURRENT_VERSE_CHUNK,
     });
 
-    await StorageManager.saveMemoryList(memoryList(getState()));
+    await StorageManager.saveMemoryList(memoryListPack(getState()));
     await StorageManager.saveMemoryPacks(userMemoryPacks(getState()));
   }
 }

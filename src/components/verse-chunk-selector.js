@@ -7,6 +7,7 @@ import Bible, { bookExists, chapterExists, verseExists } from '../managers/bible
 import { createVerseChunk, loadVerseChunkData } from '../helpers/verse-helper';
 import LabeledTextInput from './labeled-input';
 import LabeledPicker from './labeled-picker';
+import LabeledAutocompleteInput from './labeled-autocomplete-input';
 const textInputHeight = 27;
 
 class VerseChunkSelector extends React.Component{
@@ -64,12 +65,39 @@ class VerseChunkSelector extends React.Component{
 
         return (
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', marginBottom: 24, marginTop: 8}} >                 
-                <LabeledPicker ref={ref=>this.bookTextInput = ref} autoFocus outlineColor={validateBook ? 'black' : Colors.red} placeholder="Book" style={{width: 100, marginRight: 20,}} onChangeText={(text)=>this.onTextInputChange('book', text)}/>
-                <LabeledTextInput ref={ref=>this.chapterTextInput = ref} outlineColor={validateChapter ? 'black' : Colors.red} placeholder="Chapter" keyboardType="numeric" style={{width: 45}} onChangeText={(text)=>this.onTextInputChange('chapter', text)}/>
+                <LabeledAutocompleteInput ref={ref=>this.bookTextInput = ref} 
+                    autoFocus 
+                    outlineColor={validateBook ? 'black' : Colors.red} 
+                    placeholder="Book" 
+                    style={{width: 100, marginRight: 20,}} 
+                    onChangeText={(text)=>this.onTextInputChange('book', text)}
+                    goNextInput={()=>this.chapterTextInput.focus()}
+                    />
+                <LabeledTextInput ref={ref=>this.chapterTextInput = ref} 
+                    outlineColor={validateChapter ? 'black' : Colors.red} 
+                    placeholder="Chapter" 
+                    keyboardType="numeric" 
+                    style={{width: 45}} 
+                    onChangeText={(text)=>this.onTextInputChange('chapter', text)}
+                    goNextInput={()=>this.verseStartTextInput.focus()}
+                    />
                 <Text style={{lineHeight: textInputHeight,...Fonts.h2, marginHorizontal: 10}}>:</Text>
-                <LabeledTextInput ref={ref=>this.verseStartTextInput = ref} outlineColor={validateVerseStart ? 'black' : Colors.red} placeholder="Verse" keyboardType="numeric" style={{width: 40}} onChangeText={(text)=>this.onTextInputChange('verseStart', text)}/>
+                <LabeledTextInput ref={ref=>this.verseStartTextInput = ref} 
+                    outlineColor={validateVerseStart ? 'black' : Colors.red} 
+                    placeholder="Verse" 
+                    keyboardType="numeric" 
+                    style={{width: 40}} 
+                    onChangeText={(text)=>this.onTextInputChange('verseStart', text)}
+                    goNextInput={()=>this.verseEndTextInput.focus()}
+                    />
                 <Text style={{height: 20, lineHeight: 20, ...Fonts.h2, marginHorizontal: 6}}>-</Text>
-                <LabeledTextInput ref={ref=>this.verseEndTextInput = ref} outlineColor={validateVerseEnd ? 'black' : (verseEnd.length == 0) ? Colors.gray : Colors.red} keyboardType="number-pad" style={{width: 40}} onChangeText={(text)=>this.onTextInputChange('verseEnd', text)}/>
+                <LabeledTextInput ref={ref=>this.verseEndTextInput = ref} 
+                    outlineColor={validateVerseEnd ? 'black' : (verseEnd.length == 0) ? Colors.gray : Colors.red} 
+                    keyboardType="number-pad" 
+                    style={{width: 40}} 
+                    onChangeText={(text)=>this.onTextInputChange('verseEnd', text)}
+                    goNextInput={()=>this.verseEndTextInput.blur()}
+                />
             </View>
         );
     }

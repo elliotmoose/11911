@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid'
 
 export function listToIdObject(list) {
@@ -35,11 +36,11 @@ export let createMemoryPack = function({id=uuidv4(), name, verseChunks={}, compl
         completionDate,
         dateCreated,
         get nameWithCompletion(){
-            return `${this.name} (${this.completionCount()}/${Object.values(this.verseChunks).length} completed)`;
+            return `${this.name} (${this.completionCount}/${Object.values(this.verseChunks).length} completed)`;
         },
-        completionCount: ()=>{
+        get completionCount(){
             let count = 0;
-            for(let verseChunk of Object.values(verseChunks)) {
+            for(let verseChunk of Object.values(this.verseChunks)) {
                 if(verseChunk.completionDate) count++;
             }
             return count;

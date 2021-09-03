@@ -22,19 +22,11 @@ export function userMemoryPacks(state) {
 }
 
 export function currentVerseChunk(state) {
-    let { packId, verseChunkId } = state.verseChunk.current;
-    console.log(state.verseChunk.current);
+    let memoryPack = currentPack(state);
+    if(!memoryPack) return null;
     
-    
-    if(packId === null) {
-        if(!verseChunkId) verseChunkId = Object.values(state.verseChunk.memoryListPack.verseChunks)[0].id; //default to first 
-        return state.verseChunk.memoryListPack.verseChunks[verseChunkId];
-    }
-    else {
-        let memoryPack = state.verseChunk.userMemoryPacks[packId];
-        if(!memoryPack) return null;
-        return memoryPack.verseChunks[verseChunkId];
-    }
+    let {verseChunkId } = state.verseChunk.current;
+    return memoryPack.verseChunks[verseChunkId];
 }
 
 export function getNeighbourVerseChunks(state) {

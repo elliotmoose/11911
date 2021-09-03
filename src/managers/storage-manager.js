@@ -1,26 +1,29 @@
 import AsyncStorage from "@react-native-community/async-storage";
 import { createMemoryPack, createVerseChunk } from "../helpers/verse-helper";
 
+//STORAGE_KEYS
+const [MEMORY_LIST, MEMORY_PACKS, CURRENT] = ['MEMORY_LIST', 'MEMORY_PACKS', 'CURRENT'];
 const RESET_STORAGE = false;
+
 export async function saveMemoryList(memoryList) {
-    await AsyncStorage.setItem('MEMORY_LIST', JSON.stringify(memoryList));
+    await AsyncStorage.setItem(MEMORY_LIST, JSON.stringify(memoryList));
 }
 
 export async function saveMemoryPacks(memoryPacks) {
-    await AsyncStorage.setItem('MEMORY_PACKS', JSON.stringify(memoryPacks));
+    await AsyncStorage.setItem(MEMORY_PACKS, JSON.stringify(memoryPacks));
 }
 
 export async function saveCurrent(current) {
-    await AsyncStorage.setItem('CURRENT', JSON.stringify(current));    
+    await AsyncStorage.setItem(CURRENT, JSON.stringify(current));    
 }
 
 async function loadMemoryList() {
-    if (RESET_STORAGE) await AsyncStorage.removeItem('MEMORY_LIST');
-    let memoryListString = await AsyncStorage.getItem('MEMORY_LIST');
+    if (RESET_STORAGE) await AsyncStorage.removeItem(MEMORY_LIST);
+    let memoryListString = await AsyncStorage.getItem(MEMORY_LIST);
 
     if(!memoryListString) {
         let psalms119 = createVerseChunk({book: 'psalms', chapter: 119, verseStart: 11})
-        let joshua1 = createVerseChunk({book: 'joshua', chapter: 1, verseStart: 8, completionDate: new Date()})
+        let joshua1 = createVerseChunk({book: 'joshua', chapter: 1, verseStart: 8})
         let memoryListPack = createMemoryPack({id: null, name: 'My Memory List', verseChunks: {
             [psalms119.id] : psalms119,
             [joshua1.id] : joshua1,
@@ -38,9 +41,9 @@ async function loadMemoryList() {
 }
 
 async function loadMemoryPacks() {
-    if (RESET_STORAGE) await AsyncStorage.removeItem('MEMORY_PACKS');
+    if (RESET_STORAGE) await AsyncStorage.removeItem(MEMORY_PACKS);
 
-    let userMemoryPacksString = await AsyncStorage.getItem('MEMORY_PACKS');
+    let userMemoryPacksString = await AsyncStorage.getItem(MEMORY_PACKS);
     if(!userMemoryPacksString) {
         let jeremiah17 = createVerseChunk({book: 'jeremiah', chapter: 17, verseStart: 9})
         let matthew5 = createVerseChunk({book: 'matthew', chapter: 5, verseStart: 8, completionDate: new Date()})
@@ -70,8 +73,8 @@ async function loadMemoryPacks() {
 }
 
 async function loadCurrent() {
-    if (RESET_STORAGE) await AsyncStorage.removeItem('CURRENT');
-    let currentString = await AsyncStorage.getItem('CURRENT');
+    if (RESET_STORAGE) await AsyncStorage.removeItem(CURRENT);
+    let currentString = await AsyncStorage.getItem(CURRENT);
     if(!currentString) {
         return null;
     }

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -12,7 +12,7 @@ import VerseChunkSelector from '../components/verse-chunk-selector';
 
 const headerHeight = 35;
 
-const AddMemoryPackScreen = ({ navigation, currentBible, addMemoryPack}) => {
+const AddMemoryPackScreen = ({ navigation, currentBible, addMemoryPack, packNameExists}) => {
     const insets = useSafeAreaInsets();
     const verseSelectorRef = React.createRef();
     
@@ -27,6 +27,21 @@ const AddMemoryPackScreen = ({ navigation, currentBible, addMemoryPack}) => {
     }
 
     function onPressAdd() {
+        if(verseChunks.length == 0) {
+            Alert.alert('No Verses', 'A pack must contain at least one verse');
+            return;
+        }
+        
+        if(!packName) {
+            Alert.alert('No Name', 'Please enter a name for this pack');
+            return;
+        }
+        
+        if(packNameExists(packName)) {
+            Alert.alert('Pack Exists', 'A pack with this name already exists');
+            return;
+        }
+
         let memoryPack = createMemoryPack({name: packName, verseChunks: listToIdObject(verseChunks)});
         addMemoryPack(memoryPack);
         navigation.goBack();
@@ -109,9 +124,11 @@ const AddMemoryPackScreen = ({ navigation, currentBible, addMemoryPack}) => {
 import LabeledTextInput from '../components/labeled-input';
 import { hitslop } from '../helpers/ui-helper';
 import { addMemoryPack } from '../redux/verse-chunk/verse-chunk-actions';
+import { packNameExists } from '../redux/verse-chunk/verse-chunk-selectors';
 
 const mapStateToProps = (state) => ({
-    currentBible: state.bible.currentBible
+    currentBible: state.bible.currentBible,
+    packNameExists: (packName)=>packNameExists(state, packName),
 });
 
 const mapDispatchToProps = {

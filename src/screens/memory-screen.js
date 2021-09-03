@@ -173,13 +173,13 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                 </View>
 
                 <View style={{flexDirection: 'row', height: 24, marginBottom: 2, marginHorizontal: 8}}>
-                    <IconButton style={{flex: 1, alignItems: 'flex-start'}} icon={Images.prev} tintColor={Colors.darkgray} size={6} hitslop={hitslop()} onPress={()=>setCurrent(neighbourVerseChunks?.prev?.id, currentPack.id)}>
+                    <IconButton style={{flex: 1, alignItems: 'flex-start'}} icon={neighbourVerseChunks?.prev && Images.prev} tintColor={Colors.darkgray} size={6} hitslop={hitslop()} onPress={()=>setCurrent(neighbourVerseChunks?.prev?.id, currentPack.id)}>
                         <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginLeft: 7, marginBottom: 2}}>{neighbourVerseChunks?.prev?.toString()}</Text>
                     </IconButton>
                     <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
                         <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.gray}}>{currentPack?.nameWithCompletion}</Text>
                     </View>
-                    <IconButton style={{flex: 1, alignItems: 'flex-end'}} icon={Images.next} iconPosition='end' tintColor={Colors.darkgray} size={6}  hitslop={hitslop()} onPress={()=>setCurrent(neighbourVerseChunks?.next?.id, currentPack.id)}>
+                    <IconButton style={{flex: 1, alignItems: 'flex-end'}} icon={neighbourVerseChunks?.next && Images.next} iconPosition='end' tintColor={Colors.darkgray} size={6}  hitslop={hitslop()} onPress={()=>setCurrent(neighbourVerseChunks?.next?.id, currentPack.id)}>
                         <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginRight: 7, marginBottom: 2}}>{neighbourVerseChunks?.next?.toString()}</Text>
                     </IconButton>
                 </View>

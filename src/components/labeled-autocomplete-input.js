@@ -46,8 +46,8 @@ export default class LabeledAutocompleteInput extends React.Component {
         return (<View style={{...style}} {...otherProps}>
             <Text style={{...Fonts.primary, ...Fonts.verysmall, color: outlineColor}}>{placeholder}</Text>
             <View style={{...styles.pickerContainer, borderColor: outlineColor}}>
-                <TextInput ref={(ref)=>this.textInputBackground=ref} style={{...styles.textInput, borderColor: outlineColor, position: 'absolute', top: 0, left:0 , right: 0, bottom: 0, color: Colors.gray}} value={this.state.suggestion}/>
-                <TextInput ref={(ref)=>this.textInput=ref} style={{...styles.textInput, borderColor: outlineColor}} autoFocus={autoFocus} onChangeText={this.onChangeText.bind(this)} value={this.state.value} onFocus={this.clearSuggestions.bind(this)} onBlur={this.clearSuggestions.bind(this)}/>
+                <TextInput autoCapitalize="none" ref={(ref)=>this.textInputBackground=ref} style={{...styles.textInput, borderColor: outlineColor, position: 'absolute', top: 0, left:0 , right: 0, bottom: 0, color: Colors.gray}} value={this.state.suggestion}/>
+                <TextInput autoCapitalize="none" ref={(ref)=>this.textInput=ref} style={{...styles.textInput, borderColor: outlineColor}} autoFocus={autoFocus} onChangeText={this.onChangeText.bind(this)} value={this.state.value} onFocus={this.clearSuggestions.bind(this)} onBlur={this.clearSuggestions.bind(this)}/>
             </View>
         </View>);
     }

@@ -21,6 +21,14 @@ export function userMemoryPacks(state) {
     return state.verseChunk.userMemoryPacks;
 }
 
+export function packNameExists(state, packName) {
+    for(let pack of Object.values(state.verseChunk.userMemoryPacks)) {
+        if(pack.name.toLowerCase() == packName.toLowerCase()) return true;
+    }
+
+    return false;
+}
+
 export function currentVerseChunk(state) {
     let memoryPack = currentPack(state);
     if(!memoryPack) return null;

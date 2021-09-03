@@ -5,7 +5,7 @@ export default function IconButton({ icon, size, textStyle, iconStyle, textValue
     return (<TouchableOpacity {...props}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {iconPosition == 'end' && children}
-            <Image source={icon} style={{ height: size, width: size, tintColor, ...iconStyle }} resizeMode='contain' />
+            {icon && <Image source={icon} style={{ height: size, width: size, tintColor, ...iconStyle }} resizeMode='contain' />}
             {iconPosition == 'start' && children}
         </View>
     </TouchableOpacity>);

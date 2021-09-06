@@ -3,7 +3,7 @@ import { createMemoryPack, createVerseChunk } from "../helpers/verse-helper";
 
 //STORAGE_KEYS
 const [MEMORY_LIST, MEMORY_PACKS, CURRENT] = ['MEMORY_LIST', 'MEMORY_PACKS', 'CURRENT'];
-const RESET_STORAGE = false;
+const RESET_STORAGE = true;
 
 export async function saveMemoryList(memoryList) {
     await AsyncStorage.setItem(MEMORY_LIST, JSON.stringify(memoryList));
@@ -46,10 +46,14 @@ async function loadMemoryPacks() {
     let userMemoryPacksString = await AsyncStorage.getItem(MEMORY_PACKS);
     if(!userMemoryPacksString) {
         let jeremiah17 = createVerseChunk({book: 'jeremiah', chapter: 17, verseStart: 9})
-        let matthew5 = createVerseChunk({book: 'matthew', chapter: 5, verseStart: 8, completionDate: new Date()})
+        let matthew5 = createVerseChunk({book: 'matthew', chapter: 5, verseStart: 8})
+        let proverbs4 = createVerseChunk({book: 'proverbs', chapter: 4, verseStart: 23})
+        let psalms51 = createVerseChunk({book: 'psalms', chapter: 51, verseStart: 7, verseEnd: 10})
         let introMemoryPack = createMemoryPack({name: 'The Heart', verseChunks: {
-            [jeremiah17.id]: jeremiah17,
             [matthew5.id]: matthew5,
+            [proverbs4.id]: proverbs4,
+            [jeremiah17.id]: jeremiah17,
+            [psalms51.id]: psalms51,
         }})
 
         let userMemoryPacks = {

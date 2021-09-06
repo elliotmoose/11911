@@ -80,7 +80,7 @@ const AddMemoryPackScreen = ({ navigation, currentBible, addMemoryPack, packName
                     </View>
                     <ScrollView>
                         <View>
-                            <LabeledTextInput autoFocus outlineColor={'black'} placeholder="Memory Pack Name" style={{width: 150, marginRight: 20, marginBottom: 8}} textAlign='left' onChangeText={(text)=>setPackName(text)}/>
+                            <LabeledTextInput autoCapitalize='sentences' autoFocus outlineColor={'black'} placeholder="Memory Pack Name" style={{width: 150, marginRight: 20, marginBottom: 8}} textAlign='left' onChangeText={(text)=>setPackName(text)}/>
                             {verseChunks.map((verseChunk, i)=>{
                                 return <View style={{marginTop: 8, marginLeft: 6}} key={`${i}`}>
                                     <View style={{flexDirection: 'row'}}>

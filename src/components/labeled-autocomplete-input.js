@@ -18,15 +18,19 @@ export default class LabeledAutocompleteInput extends React.Component {
         value: ""
     }
 
+    acceptSuggestion() {
+        this.setState({value: this.state.suggestion});
+        this.props.onChangeText(this.state.suggestion);
+        this.props.onSubmitEditing();
+    }
+
     onChangeText(value) {
         //check to accept suggestion if user pressed whitespace
         let didAddChar = (value.length > this.state.value.length); 
         let lastCharIsWhitespace = (value[value.length-1] == " ");
         let hasAutocomplete = (this.state.autocomplete.length != 0);
         if(didAddChar && lastCharIsWhitespace && hasAutocomplete) {
-            this.setState({value: this.state.suggestion});
-            this.props.onChangeText(this.state.suggestion);
-            this.props.goNextInput();
+            acceptSuggestion();
             return;
         }
 
@@ -46,8 +50,8 @@ export default class LabeledAutocompleteInput extends React.Component {
         return (<View style={{...style}} {...otherProps}>
             <Text style={{...Fonts.primary, ...Fonts.verysmall, color: outlineColor}}>{placeholder}</Text>
             <View style={{...styles.pickerContainer, borderColor: outlineColor}}>
-                <TextInput autoCapitalize="none" ref={(ref)=>this.textInputBackground=ref} style={{...styles.textInput, borderColor: outlineColor, position: 'absolute', top: 0, left:0 , right: 0, bottom: 0, color: Colors.gray}} value={this.state.suggestion}/>
-                <TextInput autoCapitalize="none" ref={(ref)=>this.textInput=ref} style={{...styles.textInput, borderColor: outlineColor}} autoFocus={autoFocus} onChangeText={this.onChangeText.bind(this)} value={this.state.value} onFocus={this.clearSuggestions.bind(this)} onBlur={this.clearSuggestions.bind(this)}/>
+                <TextInput autoCapitalize="words" ref={(ref)=>this.textInputBackground=ref} style={{...styles.textInput, borderColor: outlineColor, position: 'absolute', top: 0, left:0 , right: 0, bottom: 0, color: Colors.gray}} value={this.state.suggestion}/>
+                <TextInput autoCapitalize="words" ref={(ref)=>this.textInput=ref} style={{...styles.textInput, borderColor: outlineColor}} autoFocus={autoFocus} onSubmitEditing={this.acceptSuggestion.bind(this)} onChangeText={this.onChangeText.bind(this)} value={this.state.value} onFocus={this.clearSuggestions.bind(this)} onBlur={this.clearSuggestions.bind(this)}/>
             </View>
         </View>);
     }

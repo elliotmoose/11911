@@ -71,32 +71,35 @@ class VerseChunkSelector extends React.Component{
                     placeholder="Book" 
                     style={{width: 100, marginRight: 20,}} 
                     onChangeText={(text)=>this.onTextInputChange('book', text)}
-                    goNextInput={()=>this.chapterTextInput.focus()}
+                    onSubmitEditing={()=>this.chapterTextInput.focus()}
                     />
                 <LabeledTextInput ref={ref=>this.chapterTextInput = ref} 
                     outlineColor={validateChapter ? 'black' : Colors.red} 
                     placeholder="Chapter" 
-                    keyboardType="numeric" 
+                    keyboardType="number-pad" 
+                    returnKeyType="done"
                     style={{width: 45}} 
                     onChangeText={(text)=>this.onTextInputChange('chapter', text)}
-                    goNextInput={()=>this.verseStartTextInput.focus()}
+                    onSubmitEditing={()=>this.verseStartTextInput.focus()}
                     />
                 <Text style={{lineHeight: textInputHeight,...Fonts.h2, marginHorizontal: 10}}>:</Text>
                 <LabeledTextInput ref={ref=>this.verseStartTextInput = ref} 
                     outlineColor={validateVerseStart ? 'black' : Colors.red} 
                     placeholder="Verse" 
-                    keyboardType="numeric" 
+                    keyboardType="number-pad" 
+                    returnKeyType="done"
                     style={{width: 40}} 
                     onChangeText={(text)=>this.onTextInputChange('verseStart', text)}
-                    goNextInput={()=>this.verseEndTextInput.focus()}
+                    onSubmitEditing={()=>this.verseEndTextInput.focus()}
                     />
                 <Text style={{height: 20, lineHeight: 20, ...Fonts.h2, marginHorizontal: 6}}>-</Text>
                 <LabeledTextInput ref={ref=>this.verseEndTextInput = ref} 
                     outlineColor={validateVerseEnd ? 'black' : (verseEnd.length == 0) ? Colors.gray : Colors.red} 
                     keyboardType="number-pad" 
+                    returnKeyType="done"
                     style={{width: 40}} 
                     onChangeText={(text)=>this.onTextInputChange('verseEnd', text)}
-                    goNextInput={()=>this.verseEndTextInput.blur()}
+                    onSubmitEditing={()=>this.verseEndTextInput.blur()}
                 />
             </View>
         );

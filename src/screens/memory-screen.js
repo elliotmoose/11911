@@ -102,7 +102,15 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                         },
                         {
                             text: 'Next Verse',
-                            onPress: ()=>openMemoryList()
+                            onPress: ()=>{
+                                let isMemoryList = (currentPack.id == null);
+                                if(isMemoryList) {
+                                    openMemoryList();
+                                }
+                                else if(neighbourVerseChunks?.next?.id){
+                                    setCurrent(neighbourVerseChunks?.next?.id, currentPack.id);
+                                }
+                            }
                         },
                     ])
                 }
@@ -216,9 +224,9 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                         </View>
                     </ScrollView>
                     <View style={{ flexDirection: 'row', height: 22, alignItems: 'center'}}>
-                        <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22, marginRight: 12 }} onPress={togglePeek}>
+                        {/* <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22, marginRight: 12 }} onPress={togglePeek}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.settings} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22, marginRight: 12 }} onPress={openMemoryPacks}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.read} />
                         </TouchableOpacity>
@@ -226,8 +234,8 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.list} />
                         </TouchableOpacity>
                         <View style={{ flex: 1 }} />
-                        <TouchableOpacity hitSlop={hitslop()} style={{ height: 18, borderRadius: 12, borderWidth: 1, paddingHorizontal: 20, justifyContent: 'center'}} onPress={toggleMode}>
-                            <Text style={{...Fonts.primary, ...Fonts.small, lineHeight: 18}}>{capitaliseFirst(mode)}</Text>
+                        <TouchableOpacity hitSlop={hitslop()} style={{ height: 18, borderRadius: 12, borderWidth: 1, paddingHorizontal: 20, justifyContent: 'center', width: 92}} onPress={toggleMode}>
+                            <Text style={{...Fonts.primary, ...Fonts.small, lineHeight: 18, textAlign: 'center'}}>{capitaliseFirst(mode)}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

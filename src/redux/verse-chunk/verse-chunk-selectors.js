@@ -43,6 +43,7 @@ export function getNeighbourVerseChunks(state) {
     let memoryPack = ((packId === null) ? state.verseChunk.memoryListPack : state.verseChunk.userMemoryPacks[packId]);
     if(!memoryPack) return {next: null, prev: null};
     let verseChunkList = sortedVerseChunkListByCreateDate(Object.values(memoryPack.verseChunks));
+    verseChunkList.reverse();
 
     if(verseChunkList.length <= 1) return {next: null, prev: null};
 

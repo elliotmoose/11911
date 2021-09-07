@@ -30,7 +30,7 @@ export default class LabeledAutocompleteInput extends React.Component {
         let lastCharIsWhitespace = (value[value.length-1] == " ");
         let hasAutocomplete = (this.state.autocomplete.length != 0);
         if(didAddChar && lastCharIsWhitespace && hasAutocomplete) {
-            acceptSuggestion();
+            this.acceptSuggestion();
             return;
         }
 

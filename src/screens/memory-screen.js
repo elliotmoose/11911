@@ -71,6 +71,10 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
     function openMemoryPacks() {
         navigation.navigate('MemoryPacks');
     }
+    
+    function openSettings() {
+        navigation.navigate('Settings');
+    }
 
 
     function onChangeText(text) {
@@ -185,7 +189,7 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                         <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginLeft: 7, marginBottom: 2}}>{neighbourVerseChunks?.prev?.toString()}</Text>
                     </IconButton>
                     <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
-                        <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.gray}}>{currentPack?.nameWithCompletion}</Text>
+                        <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.gray}}>{currentPack?.getNameWithCompletion()}</Text>
                     </View>
                     <IconButton style={{flex: 1, alignItems: 'flex-end'}} icon={neighbourVerseChunks?.next && Images.next} iconPosition='end' tintColor={Colors.darkgray} size={6}  hitslop={hitslop()} onPress={()=>setCurrent(neighbourVerseChunks?.next?.id, currentPack.id)}>
                         <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginRight: 7, marginBottom: 2}}>{neighbourVerseChunks?.next?.toString()}</Text>
@@ -224,9 +228,9 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                         </View>
                     </ScrollView>
                     <View style={{ flexDirection: 'row', height: 22, alignItems: 'center'}}>
-                        {/* <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22, marginRight: 12 }} onPress={togglePeek}>
+                        <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22, marginRight: 12 }} onPress={openSettings}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.settings} />
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
                         <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22, marginRight: 12 }} onPress={openMemoryPacks}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.read} />
                         </TouchableOpacity>

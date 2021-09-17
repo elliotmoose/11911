@@ -10,6 +10,7 @@ import store from './src/redux/store';
 import MemoryPacksScreen from './src/screens/memory-packs-screen';
 import AddMemoryPackScreen from './src/screens/add-memory-pack-screen';
 import EditMemoryPackScreen from './src/screens/edit-memory-pack-screen';
+import { SettingsScreen } from './src/screens/settings-screen';
 
 const RootStack = createNativeStackNavigator();
 
@@ -28,6 +29,7 @@ const App = () => {
               <RootStack.Screen name="MemoryPacks" component={MemoryPacksScreen} />
               <RootStack.Screen name="AddMemoryPack" component={AddMemoryPackScreen} />
               <RootStack.Screen name="EditMemoryPack" component={EditMemoryPackScreen} />
+              <RootStack.Screen name="Settings" component={SettingsScreen} />
             </RootStack.Group>
           </RootStack.Navigator>
         </NavigationContainer>

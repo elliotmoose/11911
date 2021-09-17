@@ -33,12 +33,28 @@ export let createMemoryPack = function({id=uuidv4(), name, verseChunks={}, compl
         id,
         name,
         verseChunks: newVerseChunks,
-        completionDate,
-        dateCreated,
-        get nameWithCompletion(){
-            return `${this.name} (${this.completionCount}/${Object.values(this.verseChunks).length} completed)`;
+        getCompletionDate(){
+            let completeDate;
+            let completed = true;
+            for(let verseChunk of Object.values(this.verseChunks)) {
+                if(!verseChunk.completionDate) {
+                    completed = false;
+                    break;
+                }
+                else if(completeDate === undefined || moment(completeDate).isBefore(verseChunk.completionDate)){
+                    completeDate = verseChunk.completionDate;
+                }
+            }
+
+            if(!completed) return null;
+
+            return completeDate;
         },
-        get completionCount(){
+        dateCreated,
+        getNameWithCompletion(){
+            return `${this.name} (${this.getCompletionCount()}/${Object.values(this.verseChunks).length} completed)`;
+        },
+        getCompletionCount(){
             let count = 0;
             for(let verseChunk of Object.values(this.verseChunks)) {
                 if(verseChunk.completionDate) count++;

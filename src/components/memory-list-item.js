@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableHighlight, View } from 'react-native';
 import Bible from '../managers/bible-manager';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
@@ -11,8 +11,8 @@ const capsuleHeight = 18;
 const MemoryListItem = ({ verseChunk, onPress }) => {
     let isComplete = (verseChunk.completionDate != null);
 
-    return <TouchableOpacity onPress={onPress}>
-        <View style={{paddingVertical: 12}}>
+    return <TouchableHighlight onPress={onPress}>
+        <View style={{paddingVertical: 12, paddingHorizontal: 20, backgroundColor: 'white'}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Text style={{ ...Fonts.alternate, ...Fonts.small }}>{verseChunkTitle(verseChunk)}</Text>
                 <View style={{height: capsuleHeight, borderRadius: capsuleHeight/2, borderWidth: 1.2, borderColor: isComplete ? Colors.darkgreen : Colors.gray, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8, flexDirection: 'row'}}>
@@ -24,7 +24,7 @@ const MemoryListItem = ({ verseChunk, onPress }) => {
                 {verseChunkStringData(verseChunk, Bible)}
             </Text>
         </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
 };
 
 export default MemoryListItem;

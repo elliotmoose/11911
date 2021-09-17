@@ -103,18 +103,18 @@ export default (state = initialState, action) => {
 					if(!memoryPack) return state;
 					memoryPack.verseChunks[verseChunkId] = {...memoryPack.verseChunks[verseChunkId], completionDate: new Date()};
 	
-					//check for pack completion 
-					let completed = true;
-					for(let verseChunk of Object.values(memoryPack.verseChunks)) {
-						if(!verseChunk.completionDate) {
-							completed = false;
-							break;
-						}
-					}
+					// //check for pack completion 
+					// let completed = true;
+					// for(let verseChunk of Object.values(memoryPack.verseChunks)) {
+					// 	if(!verseChunk.completionDate) {
+					// 		completed = false;
+					// 		break;
+					// 	}
+					// }
 	
-					if(completed) {
-						memoryPack = {...memoryPack, completionDate: new Date()}
-					}
+					// if(completed) {
+					// 	memoryPack = {...memoryPack, completionDate: new Date()}
+					// }
 	
 					return {...state, userMemoryPacks: {...userMemoryPacks, [packId]: memoryPack}};				
 				}

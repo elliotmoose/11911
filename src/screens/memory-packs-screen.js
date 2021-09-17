@@ -51,7 +51,7 @@ const MemoryPacksScreen = ({ navigation, setCurrent, memoryPacks, deleteMemoryPa
                         let memoryPack = data.item.pack;
                         let memoryPackId = memoryPack.id;
                         let onPress = ()=>onSelectMemoryPack(memoryPackId);
-                        return (<MemoryPackItem onPress={onPress} memoryPack={memoryPack} key={data.item.key}/>);
+                        return (<MemoryPackItem onPress={onPress} memoryPack={memoryPack} key={data.item.key+memoryPack.name}/>);
                     }}
                     actions={actions}
                 />

@@ -33,7 +33,7 @@ const MemoryListScreen = ({ navigation, setCurrent, memoryList, deleteVerseChunk
     return (
         <SafeAreaView style={{flex: 1}} forceInset={{bottom: 'always', top: 'never'}}>
             <View style={{flex: 1}}>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20}}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, paddingBottom: 0}}>
                     <Text style={{...Fonts.h1}}>My Memory List</Text>
                     <TouchableOpacity style={{height: '100%', width: 22}} onPress={onAddVerseChunkPressed}>
                         <Text style={{fontSize: 30}}>+</Text>

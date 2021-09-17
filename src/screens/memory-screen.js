@@ -12,6 +12,7 @@ import { fuzzyMatch, loadVerseChunkData, memoryListEventEmitter, tokeniseVerse, 
 import { connect } from 'react-redux';
 import { capitaliseFirst } from '../helpers/string-helper';
 
+let itemLayoutPositionMap = {}
 const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk, loadStorageToState, neighbourVerseChunks, currentPack, setCurrent }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const insets = useSafeAreaInsets();
@@ -19,6 +20,8 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
     useEffect(()=>{
         loadStorageToState();
     },[]);
+    let verseRefScrollView = useRef();
+    let userInputScrollView = useRef();
     //TODO: move this into a selector
     let textInputRef = useRef();
     let verseChunkData = (currentVerseChunk !== undefined && currentVerseChunk !== null) ? loadVerseChunkData(currentVerseChunk, Bible) : [];
@@ -34,6 +37,12 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
             textInputRef.current.blur();
         }
     }, [isPeeking]);
+
+    useEffect(()=>{
+        setTimeout(() => {
+            userInputScrollView.current.scrollToEnd();
+        }, 10);
+    }, [correctVerses]);
 
     function togglePeek() {
         if (!isPeeking) {
@@ -92,12 +101,20 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
             let newCorrectVerses = [...correctVerses, { text, verseNum: currentVerse.verseNum}];
             setCorrectVerses(newCorrectVerses);
             setUserText("");
+
+            let scrollToY = itemLayoutPositionMap[newCorrectVerses.length];
+            if(scrollToY !== undefined) {
+                verseRefScrollView.current.scrollTo({x: 0, y: scrollToY});
+            }
+            else {
+                verseRefScrollView.current.scrollToEnd();
+            }
             
             let completedVerseChunk = (newCorrectVerses.length == verseChunkData.length && verseChunkData.length !== 0);
             if(completedVerseChunk) {
                 setUserText('');
                 setCorrectVerses([]);
-
+                
                 if(mode == 'test') {
                     completeCurrentVerseChunk();
                     Alert.alert('Test Complete!', `You've completed ${currentVerseChunk.toString()}`, [
@@ -138,11 +155,13 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
             <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
             <View style={{ height: '100%' }}>
                 <View style={{ flex: 1, marginTop: 30 }}>
-                    <ScrollView>
+                    <ScrollView ref={verseRefScrollView}>
                         <View style={{ paddingHorizontal: 30, paddingBottom: 10 }}>
                             {/* for each verse, we render text */}
                             {verseChunkData.map((verse, i) => {
-                                return <View style={{ flexDirection: 'row' }} key={`${i}`}>
+                                return <View style={{ flexDirection: 'row' }} key={`${i}`} onLayout={(e)=>{
+                                        itemLayoutPositionMap[i] = e.nativeEvent.layout.y;
+                                    }}>
                                     <Text style={{ ...Fonts.h3, marginRight: 6 }}>{verse.verseNum}</Text>
                                     <Text key={`${i}`} style={{ marginTop: 4, lineHeight: 20, ...Fonts.primary }}>
                                         {tokeniseVerse(verse.text, userText).map((token, j, arr) => {
@@ -207,7 +226,7 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={isPeeking ? Images.eye_off : Images.eye} />
                         </TouchableOpacity>
                     </View>
-                    <ScrollView>
+                    <ScrollView ref={userInputScrollView}>
                         <View style={{minHeight: '100%'}}>
                             {correctVerses.map((verse, i)=><View key={`${i}`} style={{flexDirection: 'row'}}>
                                 <Text style={{...Fonts.h3, marginRight: 6, color: Colors.gray}}>{verse.verseNum}</Text>

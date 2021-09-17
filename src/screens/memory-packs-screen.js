@@ -39,7 +39,7 @@ const MemoryPacksScreen = ({ navigation, setCurrent, memoryPacks, deleteMemoryPa
     return (
         <SafeAreaView style={{flex: 1}} forceInset={{bottom: 'always', top: 'never'}}>
             <View style={{flex: 1}}>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20}}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, paddingBottom: 0}}>
                     <Text style={{...Fonts.h1}}>Memory Packs</Text>
                     <TouchableOpacity style={{height: '100%', width: 22}} onPress={onCreateMemoryPackPressed}>
                         <Text style={{fontSize: 30}}>+</Text>
@@ -51,7 +51,7 @@ const MemoryPacksScreen = ({ navigation, setCurrent, memoryPacks, deleteMemoryPa
                         let memoryPack = data.item.pack;
                         let memoryPackId = memoryPack.id;
                         let onPress = ()=>onSelectMemoryPack(memoryPackId);
-                        return (<MemoryPackItem onPress={onPress} memoryPack={memoryPack} key={data.item.key+memoryPack.name}/>);
+                        return (<MemoryPackItem onPress={onPress} memoryPack={memoryPack} key={data.item.key}/>);
                     }}
                     actions={actions}
                 />

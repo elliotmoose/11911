@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import store from './src/redux/store';
 import MemoryPacksScreen from './src/screens/memory-packs-screen';
 import AddMemoryPackScreen from './src/screens/add-memory-pack-screen';
+import EditMemoryPackScreen from './src/screens/edit-memory-pack-screen';
 
 const RootStack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ const App = () => {
               <RootStack.Screen name="AddVerseChunk" component={AddVerseChunkScreen} />
               <RootStack.Screen name="MemoryPacks" component={MemoryPacksScreen} />
               <RootStack.Screen name="AddMemoryPack" component={AddMemoryPackScreen} />
+              <RootStack.Screen name="EditMemoryPack" component={EditMemoryPackScreen} />
             </RootStack.Group>
           </RootStack.Navigator>
         </NavigationContainer>

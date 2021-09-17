@@ -183,6 +183,27 @@ export let tokeniseVerse = function(verse, userText) {
     return outputTokens;
 };
 
+export function tokenise(verseChunkData, currentVerseIndex, userText, peeking, mode='practice') {
+    let output = []; //list of verses, where each verse is a list of tokens
+
+    for(let verse of verseChunkData) {
+        let verseTokenObjects = [];
+        let verseTokens = getTokens(verse);
+
+        for(let verseToken of verseTokens) {
+            verseTokenObjects.push({
+                text: verseToken,
+                state: 'hidden', // hidden | correct | peeked | delimiter
+                show: false
+            })
+        }
+
+        output.push(verseTokenObjects);
+    }
+
+    return output;
+}
+
 export function fuzzyMatch(verse, userText) {
     let referenceTokens = getTokens(verse);
     let userWords = getWords(userText);

@@ -1,6 +1,6 @@
 import { Alert } from "react-native";
 import { createMemoryPack, createVerseChunk } from "../../helpers/verse-helper";
-import { ADD_VERSE_CHUNK, LOAD_DATA, SET_CURRENT, COMPLETE_CURRENT_VERSE_CHUNK, LOAD_INITIAL_STATE, ADD_MEMORY_PACK } from "./verse-chunk-actions";
+import { ADD_VERSE_CHUNK, LOAD_DATA, SET_CURRENT, COMPLETE_CURRENT_VERSE_CHUNK, LOAD_INITIAL_STATE, ADD_MEMORY_PACK, DELETE_VERSE_CHUNK, DELETE_MEMORY_PACK, SAVE_EDIT_MEMORY_PACK } from "./verse-chunk-actions";
 
 let memoryListPack = createMemoryPack({id: null, name: 'My Memory List', verseChunks: {}});
 
@@ -51,11 +51,33 @@ export default (state = initialState, action) => {
 					return { ...state, memoryListPack: {...state.memoryListPack, verseChunks}}
 				}
 				return state;
+			case DELETE_VERSE_CHUNK: {
+				if(action.verseChunkId) {
+					let {[action.verseChunkId]: deletedVerseChunk, ...newVerseChunks} = state.memoryListPack.verseChunks;
+					return { ...state, memoryListPack: {...state.memoryListPack, verseChunks: newVerseChunks}}
+				}
+			}
 			case ADD_MEMORY_PACK:
 				if (action.memoryPack) {
 					return {...state, userMemoryPacks: {...state.userMemoryPacks, [action.memoryPack.id]: action.memoryPack}};
 				}
 				return state;
+			case SAVE_EDIT_MEMORY_PACK: {
+
+				let {memoryPackId, verseChunks, name} = action;
+				if(memoryPackId && verseChunks && name) {						
+					let savedMemoryPack = {...state.userMemoryPacks[memoryPackId], name, verseChunks};
+					return {...state, userMemoryPacks: {...state.userMemoryPacks, [memoryPackId]: savedMemoryPack}};
+				}
+				return state;
+			}
+			case DELETE_MEMORY_PACK: {
+				if(action.memoryPackId) {
+					let {[action.memoryPackId]: deletedMemoryPack, ...newMemoryPacks} = state.userMemoryPacks;
+					return {...state, userMemoryPacks: newMemoryPacks};
+				}
+				return state;
+			}
 			case SET_CURRENT:
 				let {packId, verseChunkId} = action.current;
 				if(verseChunkId == null) {

@@ -9,3 +9,4 @@ INFO: Unsupported notification method: $/setTrace
 [0m2021.09.03 11:08:29 INFO  time: initialize in 5.56s[0m
 [0m2021.09.03 11:08:30 WARN  Build server is not auto-connectable.[0m
 [0m2021.09.03 11:08:30 WARN  no build tool detected in workspace '/Users/elliotmoose/Desktop/Programming/00-Projects/REACT_NATIVE/WordForWord'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. [0m
+[0m2021.09.09 12:15:38 INFO  shutting down Metals[0m

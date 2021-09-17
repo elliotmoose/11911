@@ -17,10 +17,10 @@ export default class LabeledTextInput extends React.Component {
 
     render()
     {
-        let {style, placeholder, outlineColor, onChangeText, autoFocus, keyboardType, returnKeyType, textAlign='center', onSubmitEditing, autoCapitalize="none", ...otherProps} = this.props;
+        let {style, placeholder, outlineColor, onChangeText, autoFocus, keyboardType, returnKeyType, textAlign='center', onSubmitEditing, autoCapitalize="none", value, ...otherProps} = this.props;
         return (<View style={{...style}} {...otherProps}>
             <Text style={{...Fonts.primary, ...Fonts.verysmall, color: outlineColor}}>{placeholder}</Text>
-            <TextInput autoCapitalize={autoCapitalize} ref={(ref)=>this.textInput=ref} keyboardType={keyboardType} returnKeyType={returnKeyType} onSubmitEditing={onSubmitEditing} style={{...styles.textInput, borderColor: outlineColor, textAlign}} autoFocus={autoFocus} onChangeText={onChangeText} />
+            <TextInput autoCapitalize={autoCapitalize} ref={(ref)=>this.textInput=ref} keyboardType={keyboardType} returnKeyType={returnKeyType} onSubmitEditing={onSubmitEditing} value={value} style={{...styles.textInput, borderColor: outlineColor, textAlign}} autoFocus={autoFocus} onChangeText={onChangeText} />
         </View>);
     }
 };

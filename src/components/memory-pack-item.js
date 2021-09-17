@@ -1,11 +1,12 @@
 import moment from 'moment';
 import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableHighlight, View } from 'react-native';
 import Bible from '../managers/bible-manager';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import Images from '../constants/images';
 import { loadVerseChunkData, verseChunkStringData, verseChunkTitle } from '../helpers/verse-helper';
+import { sortedVerseChunkListByCreateDate } from '../redux/verse-chunk/verse-chunk-selectors';
 
 const capsuleHeight = 18;
 const MemoryPackItem = ({
@@ -13,11 +14,11 @@ const MemoryPackItem = ({
     onPress,
 }) => {
     let { verseChunks, nameWithCompletion } = memoryPack;
-    let verseChunksList = Object.values(verseChunks);
+    let verseChunksList = sortedVerseChunkListByCreateDate(Object.values(verseChunks));
     let isComplete = (memoryPack.completionDate != null);
 
-    return <TouchableOpacity onPress={onPress}>
-        <View style={{paddingVertical: 12}}>
+    return <TouchableHighlight onPress={onPress}>
+        <View style={{paddingVertical: 12, paddingHorizontal: 20, backgroundColor: 'white'}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Text style={{ ...Fonts.alternate, ...Fonts.small }}>{nameWithCompletion}</Text>
                 <View style={{height: capsuleHeight, borderRadius: capsuleHeight/2, borderWidth: 1.2, borderColor: isComplete ? Colors.darkgreen : Colors.gray, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8, flexDirection: 'row'}}>
@@ -32,7 +33,7 @@ const MemoryPackItem = ({
                 </View>)}
             </View>
         </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
 };
 
 export default MemoryPackItem;

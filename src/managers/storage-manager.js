@@ -14,7 +14,7 @@ export async function saveMemoryPacks(memoryPacks) {
 }
 
 export async function saveCurrent(current) {
-    await AsyncStorage.setItem(CURRENT, JSON.stringify(current));    
+    await AsyncStorage.setItem(CURRENT, JSON.stringify(current));
 }
 
 async function loadMemoryList() {

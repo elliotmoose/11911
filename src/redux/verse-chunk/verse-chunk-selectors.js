@@ -1,6 +1,6 @@
 import { mod } from "../../helpers/math-helper";
 
-function sortedVerseChunkListByCreateDate(list) {
+export function sortedVerseChunkListByCreateDate(list) {
     return list.sort((a,b)=>new Date(b.dateCreated) - new Date(a.dateCreated));
 }
 export function memoryListDateSorted(state) {
@@ -21,9 +21,14 @@ export function userMemoryPacks(state) {
     return state.verseChunk.userMemoryPacks;
 }
 
-export function packNameExists(state, packName) {
+export function memoryPackWithId(state, id) {
+    return state.verseChunk.userMemoryPacks[id];
+}
+
+export function packNameExists(state, packName, id=null) {
     for(let pack of Object.values(state.verseChunk.userMemoryPacks)) {
-        if(pack.name.toLowerCase() == packName.toLowerCase()) return true;
+        let isSamePack = (pack.id == id && id != null) //pack with same id allowed to have same name
+        if(pack.name.toLowerCase() == packName.toLowerCase() && !isSamePack) return true;
     }
 
     return false;
@@ -43,7 +48,7 @@ export function getNeighbourVerseChunks(state) {
     let memoryPack = ((packId === null) ? state.verseChunk.memoryListPack : state.verseChunk.userMemoryPacks[packId]);
     if(!memoryPack) return {next: null, prev: null};
     let verseChunkList = sortedVerseChunkListByCreateDate(Object.values(memoryPack.verseChunks));
-    verseChunkList.reverse();
+    // verseChunkList.reverse();
 
     if(verseChunkList.length <= 1) return {next: null, prev: null};
 

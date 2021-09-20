@@ -40,6 +40,12 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
     }, [isPeeking]);
 
     useEffect(()=>{
+        //reset 
+        setUserText('');
+        setCorrectVerses([]);
+    }, [currentVerseChunk]);
+
+    useEffect(()=>{
         setTimeout(() => {
             userInputScrollView.current.scrollToEnd();
         }, 10);
@@ -84,6 +90,22 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
     
     function openSettings() {
         navigation.navigate('Settings');
+    }
+    
+    function onUserInputFocus() {
+        setIsPeeking(false);
+
+        setTimeout(() => {
+            let scrollToY = itemLayoutPositionMap[correctVerses.length];
+            if(scrollToY !== undefined) {
+                verseRefScrollView.current.scrollTo({x: 0, y: scrollToY});
+            }
+            else {
+                verseRefScrollView.current.scrollToEnd();
+            }
+
+            userInputScrollView.current.scrollToEnd();
+        }, 50);  
     }
 
 
@@ -244,7 +266,7 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                                     editable={true}
                                     placeholder={isPeeking ? 'No typing while peeking :)' : 'Enter verse ...'}
                                     placeholderTextColor={Colors.gray}
-                                    onFocus={()=>setIsPeeking(false)}
+                                    onFocus={onUserInputFocus}
                                     onChangeText={onChangeText}
                                     value={userText}
                                     style={{ lineHeight: 20*fontScale, marginBottom: 10, ...Fonts.scaled(fontScale, Fonts.primary), flex: 1}}/>

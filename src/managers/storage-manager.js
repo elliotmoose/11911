@@ -5,6 +5,14 @@ import { createMemoryPack, createVerseChunk } from "../helpers/verse-helper";
 const [MEMORY_LIST, MEMORY_PACKS, CURRENT] = ['MEMORY_LIST', 'MEMORY_PACKS', 'CURRENT'];
 const RESET_STORAGE = true;
 
+export async function savePrefs() {
+    
+}
+
+export async function loadPrefs() {
+
+}
+
 export async function saveMemoryList(memoryList) {
     await AsyncStorage.setItem(MEMORY_LIST, JSON.stringify(memoryList));
 }
@@ -96,5 +104,5 @@ export async function loadData() {
     return { memoryListPack, userMemoryPacks, current };
 }
 
-const StorageManager = { saveMemoryList, saveMemoryPacks, saveCurrent, loadData };
+const StorageManager = { savePrefs, loadPrefs, saveMemoryList, saveMemoryPacks, saveCurrent, loadData };
 export default StorageManager;

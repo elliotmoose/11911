@@ -31,5 +31,8 @@ const Fonts = {
     large : {
         fontSize: 19,
     },
+    scaled(scale, style) {
+        return {...style, fontSize: style.fontSize * scale};
+    }
 }
 export default Fonts;

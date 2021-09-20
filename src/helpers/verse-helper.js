@@ -12,13 +12,14 @@ export function listToIdObject(list) {
 
     return output;
 }
-export let createVerseChunk = function({id=uuidv4(), book, chapter, verseStart, verseEnd = null, completionDate = null, dateCreated = new Date()}){
+export let createVerseChunk = function({id=uuidv4(), book, chapter, verseStart, verseEnd = null, version='NIV', completionDate = null, dateCreated = new Date()}){
     return {
         id,
         book,
         chapter,
         verseStart,
         verseEnd,
+        version,
         completionDate,
         dateCreated,
         toString: ()=> `${book[0].toUpperCase() + book.substring(1)} ${chapter}:${verseStart}${verseEnd == null ? '' : `-${verseEnd}`}`,

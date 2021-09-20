@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { capitaliseFirst } from '../helpers/string-helper';
 
 let itemLayoutPositionMap = {}
-const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk, loadStorageToState, neighbourVerseChunks, currentPack, setCurrent }) => {
+const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk, loadStorageToState, neighbourVerseChunks, currentPack, setCurrent, fontScale }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const insets = useSafeAreaInsets();
     
@@ -162,8 +162,8 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                                 return <View style={{ flexDirection: 'row' }} key={`${i}`} onLayout={(e)=>{
                                         itemLayoutPositionMap[i] = e.nativeEvent.layout.y;
                                     }}>
-                                    <Text style={{ ...Fonts.h3, marginRight: 6 }}>{verse.verseNum}</Text>
-                                    <Text key={`${i}`} style={{ marginTop: 4, lineHeight: 20, ...Fonts.primary }}>
+                                    <Text style={{ ...Fonts.scaled(fontScale, Fonts.h3), marginRight: 6 }}>{verse.verseNum}</Text>
+                                    <Text key={`${i}`} style={{ marginTop: 4, lineHeight: 20*fontScale, ...Fonts.scaled(fontScale, Fonts.primary) }}>
                                         {tokeniseVerse(verse.text, userText).map((token, j, arr) => {
                                             let tokenBackgroundColor = null;
                                             let tokenTextColor = Colors.text;
@@ -220,7 +220,7 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                     <View style={{position: 'absolute', top: 0, left: 0, right: 0, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.1, shadowColor: Colors.black, shadowRadius: 10, borderTopStartRadius: 30, borderTopEndRadius: 30, height: 100, backgroundColor: 'white'}}/>
                     <View style={{position: 'absolute', top: 100, left: 0, right: 0, height: 100, backgroundColor: 'white'}}/>
                     <View style={{ flexDirection: 'row', height: 30 }}>
-                        <Text allowFontScaling={false} style={{ ...Fonts.h2 }}>{verseChunkTitle(currentVerseChunk)}</Text>
+                        <Text allowFontScaling={false} style={{ ...Fonts.h2 }}>{verseChunkTitle(currentVerseChunk)} <Text style={{color: Colors.gray, ...Fonts.small}}>{currentVerseChunk?.version}</Text></Text>
                         <View style={{ flex: 1 }} />
                         <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22 }} onPress={togglePeek}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={isPeeking ? Images.eye_off : Images.eye} />
@@ -229,11 +229,11 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                     <ScrollView ref={userInputScrollView}>
                         <View style={{minHeight: '100%'}}>
                             {correctVerses.map((verse, i)=><View key={`${i}`} style={{flexDirection: 'row'}}>
-                                <Text style={{...Fonts.h3, marginRight: 6, color: Colors.gray}}>{verse.verseNum}</Text>
-                                <Text style={{ marginTop: 4, lineHeight: 20, ...Fonts.primary, color: Colors.gray }}>{verse.text}</Text>
+                                <Text style={{...Fonts.scaled(fontScale, Fonts.h3), marginRight: 6, color: Colors.gray}}>{verse.verseNum}</Text>
+                                <Text style={{ marginTop: 4, lineHeight: 20*fontScale, ...Fonts.scaled(fontScale, Fonts.primary), color: Colors.gray }}>{verse.text}</Text>
                             </View>)}
                             <View style={{flexDirection: 'row', flex: 1}}>
-                                <Text style={{...Fonts.h3, marginRight: 6, color: Colors.gray}}>{currentVerseNum == -1 ? '' : currentVerseNum}</Text>
+                                <Text style={{...Fonts.scaled(fontScale, Fonts.h3), marginRight: 6, color: Colors.gray}}>{currentVerseNum == -1 ? '' : currentVerseNum}</Text>
                                 <TextInput multiline
                                     ref={textInputRef}
                                     editable={true}
@@ -242,11 +242,12 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                                     onFocus={()=>setIsPeeking(false)}
                                     onChangeText={onChangeText}
                                     value={userText}
-                                    style={{ lineHeight: 20, marginBottom: 10, ...Fonts.primary, flex: 1}}/>
+                                    style={{ lineHeight: 20*fontScale, marginBottom: 10, ...Fonts.scaled(fontScale, Fonts.primary), flex: 1}}/>
                             </View>
                         </View>
                     </ScrollView>
                     <View style={{ flexDirection: 'row', height: 22, alignItems: 'center'}}>
+                        <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-start'}}>
                         <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22, marginRight: 12 }} onPress={openSettings}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.settings} />
                         </TouchableOpacity>
@@ -256,10 +257,15 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                         <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22, marginRight: 12 }} onPress={openMemoryList}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={Images.list} />
                         </TouchableOpacity>
-                        <View style={{ flex: 1 }} />
-                        <TouchableOpacity hitSlop={hitslop()} style={{ height: 18, borderRadius: 12, borderWidth: 1, paddingHorizontal: 20, justifyContent: 'center', width: 92}} onPress={toggleMode}>
-                            <Text  allowFontScaling={false} style={{...Fonts.primary, ...Fonts.small, lineHeight: 18, textAlign: 'center'}}>{capitaliseFirst(mode)}</Text>
-                        </TouchableOpacity>
+                        </View>
+                        <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center'}}>
+                            <CompletionTag completionDate={currentVerseChunk?.completionDate}/>
+                        </View>
+                        <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end'}}>
+                            <TouchableOpacity hitSlop={hitslop()} style={{ height: 18, borderRadius: 12, borderWidth: 1.2, paddingHorizontal: 16, justifyContent: 'center', width: 86}} onPress={toggleMode}>
+                                <Text  allowFontScaling={false} style={{...Fonts.primary, ...Fonts.small, lineHeight: 18, textAlign: 'center'}}>{capitaliseFirst(mode)}</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
                 <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={insets.top}>
@@ -274,11 +280,13 @@ import { completeCurrentVerseChunk, loadStorageToState, setCurrent } from '../re
 import { hitslop } from '../helpers/ui-helper';
 import { currentPack, currentVerseChunk, getNeighbourVerseChunks, } from '../redux/verse-chunk/verse-chunk-selectors';
 import IconButton from '../components/icon-button';
+import { CompletionTag } from '../components/completion-tag';
 
 const mapStateToProps = (state) => ({
     currentVerseChunk: currentVerseChunk(state),
     neighbourVerseChunks: getNeighbourVerseChunks(state),
     currentPack: currentPack(state),
+    fontScale: state.prefs.fontScale,
 });
 const mapDispatchToProps = {
     completeCurrentVerseChunk,

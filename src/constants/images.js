@@ -10,6 +10,7 @@ const Images = {
     remove: require('../../assets/images/remove.png'),
     next: require('../../assets/images/next.png'),
     prev: require('../../assets/images/prev.png'),
+    fonts: require('../../assets/images/fonts.png'),
 }
 
 export default Images;

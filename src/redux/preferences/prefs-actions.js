@@ -14,7 +14,7 @@ export function setFontScale(fontScale) {
     }
 }
 
-export function loadPrefs() {
+export function loadPrefsStorageToState() {
     return async function (dispatch, getState) {
 
         let prefs = await StorageManager.loadPrefs();

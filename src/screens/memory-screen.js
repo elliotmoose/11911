@@ -13,12 +13,13 @@ import { connect } from 'react-redux';
 import { capitaliseFirst } from '../helpers/string-helper';
 
 let itemLayoutPositionMap = {}
-const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk, loadStorageToState, neighbourVerseChunks, currentPack, setCurrent, fontScale }) => {
+const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk, loadPrefsStorageToState, loadVerseChunkStorageToState, neighbourVerseChunks, currentPack, setCurrent, fontScale }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const insets = useSafeAreaInsets();
     
     useEffect(()=>{
-        loadStorageToState();
+        loadVerseChunkStorageToState();
+        loadPrefsStorageToState();
     },[]);
     let verseRefScrollView = useRef();
     let userInputScrollView = useRef();
@@ -155,7 +156,11 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
             <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
             <View style={{ height: '100%' }}>
                 <View style={{ flex: 1, marginTop: 30 }}>
-                    <ScrollView ref={verseRefScrollView}>
+                    {!currentVerseChunk && <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <Image source={Images.read} style={{resizeMode: 'contain', tintColor: Colors.gray, width: 32, height: 32, marginBottom: 12}}/>
+                        <Text style={{...Fonts.scaled(fontScale, Fonts.primary), textAlign: 'center', width: '50%', color: Colors.gray}}>Select a memory verse from your memory list or from a memory pack!</Text>
+                    </View>}
+                    {currentVerseChunk && <ScrollView ref={verseRefScrollView}>
                         <View style={{ paddingHorizontal: 30, paddingBottom: 10 }}>
                             {/* for each verse, we render text */}
                             {verseChunkData.map((verse, i) => {
@@ -199,7 +204,7 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                                 </View>;
                             })}
                         </View>
-                    </ScrollView>
+                    </ScrollView>}
 
                 </View>
 
@@ -276,11 +281,12 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
     );
 };
 
-import { completeCurrentVerseChunk, loadStorageToState, setCurrent } from '../redux/verse-chunk/verse-chunk-actions';
+import { completeCurrentVerseChunk, loadVerseChunkStorageToState, setCurrent } from '../redux/verse-chunk/verse-chunk-actions';
 import { hitslop } from '../helpers/ui-helper';
 import { currentPack, currentVerseChunk, getNeighbourVerseChunks, } from '../redux/verse-chunk/verse-chunk-selectors';
 import IconButton from '../components/icon-button';
 import { CompletionTag } from '../components/completion-tag';
+import { loadPrefsStorageToState } from '../redux/preferences/prefs-actions';
 
 const mapStateToProps = (state) => ({
     currentVerseChunk: currentVerseChunk(state),
@@ -290,7 +296,8 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = {
     completeCurrentVerseChunk,
-    loadStorageToState,
+    loadVerseChunkStorageToState,
+    loadPrefsStorageToState,
     setCurrent
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MemoryScreen);

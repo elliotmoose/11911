@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Colors from '../constants/colors';
 import Fonts from '../constants/fonts';
 import Images from '../constants/images';
+import { savePrefs } from '../managers/storage-manager';
 
 const headerHeight = 35;
 const bibleCopyrightNotice = `Scripture quotations taken from The Holy Bible, New International Version® NIV®

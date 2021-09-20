@@ -2,7 +2,7 @@ import StorageManager from '../../managers/storage-manager';
 import { memoryListPack, userMemoryPacks } from './verse-chunk-selectors';
 export const [ADD_VERSE_CHUNK, DELETE_VERSE_CHUNK, ADD_MEMORY_PACK, SAVE_EDIT_MEMORY_PACK, DELETE_MEMORY_PACK, SET_CURRENT, COMPLETE_CURRENT_VERSE_CHUNK, LOAD_INITIAL_STATE] = ['ADD_VERSE_CHUNK', 'DELETE_VERSE_CHUNK', 'ADD_MEMORY_PACK', 'SAVE_EDIT_MEMORY_PACK', 'DELETE_MEMORY_PACK', 'SET_CURRENT', 'COMPLETE_CURRENT_VERSE_CHUNK', 'LOAD_INITIAL_STATE'];
 
-export function loadStorageToState() {
+export function loadVerseChunkStorageToState() {
   return async function (dispatch, getState) {
     let savedState = await StorageManager.loadData();
 

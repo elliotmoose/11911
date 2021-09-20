@@ -2,15 +2,20 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { createMemoryPack, createVerseChunk } from "../helpers/verse-helper";
 
 //STORAGE_KEYS
-const [MEMORY_LIST, MEMORY_PACKS, CURRENT] = ['MEMORY_LIST', 'MEMORY_PACKS', 'CURRENT'];
-const RESET_STORAGE = true;
+const [MEMORY_LIST, MEMORY_PACKS, CURRENT, PREFS] = ['MEMORY_LIST', 'MEMORY_PACKS', 'CURRENT', 'PREFS'];
+const RESET_STORAGE = false;
 
-export async function savePrefs() {
-    
+export async function savePrefs(prefs) {
+    await AsyncStorage.setItem(PREFS, JSON.stringify(prefs));
 }
 
 export async function loadPrefs() {
-
+    if (RESET_STORAGE) await AsyncStorage.removeItem(PREFS);
+    let prefs = await AsyncStorage.getItem(PREFS);
+    if(!prefs) {
+        return {fontScale: 1}
+    }
+    return JSON.parse(prefs);
 }
 
 export async function saveMemoryList(memoryList) {

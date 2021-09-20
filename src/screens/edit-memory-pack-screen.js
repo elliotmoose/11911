@@ -93,10 +93,10 @@ const EditMemoryPackScreen = ({ route, navigation, currentBible, saveEditMemoryP
             <View style={{flex: 1}}>
                 <View style={{flex: 1, padding: 20}}>
                     <View style={{flexDirection: 'row', alignItems: 'center', height: headerHeight}}>
-                        <Text style={{...Fonts.h1, lineHeight: headerHeight, color: Colors.black}}>Edit Memory Pack</Text>
+                        <Text allowFontScaling={false} style={{...Fonts.h1, lineHeight: headerHeight, color: Colors.black}}>Edit Memory Pack</Text>
                         <View style={{flex: 1}}/>
                         <TouchableOpacity style={{height: headerHeight, justifyContent: 'center', marginTop: 4}} onPress={onPressSave}>
-                            <Text style={{...Fonts.large, ...Fonts.primary, color: '#538862', lineHeight: headerHeight}}>Save</Text>
+                            <Text allowFontScaling={false} style={{...Fonts.large, ...Fonts.primary, color: '#538862', lineHeight: headerHeight}}>Save</Text>
                         </TouchableOpacity>
                     </View>
                     <ScrollView>

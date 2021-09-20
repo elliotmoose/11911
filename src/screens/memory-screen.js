@@ -205,13 +205,13 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
 
                 <View style={{flexDirection: 'row', height: 24, marginBottom: 2, marginHorizontal: 8}}>
                     <IconButton style={{flex: 1, alignItems: 'flex-start'}} icon={neighbourVerseChunks?.prev && Images.prev} tintColor={Colors.darkgray} size={6} hitslop={hitslop()} onPress={()=>setCurrent(neighbourVerseChunks?.prev?.id, currentPack.id)}>
-                        <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginLeft: 7, marginBottom: 2}}>{neighbourVerseChunks?.prev?.toString()}</Text>
+                        <Text allowFontScaling={false} style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginLeft: 7, marginBottom: 2}}>{neighbourVerseChunks?.prev?.toString()}</Text>
                     </IconButton>
                     <View style={{flex: 2, alignItems: 'center', justifyContent: 'center'}}>
-                        <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.gray}}>{currentPack?.getNameWithCompletion()}</Text>
+                        <Text  allowFontScaling={false} style={{...Fonts.primary, ...Fonts.small, color: Colors.gray}}>{currentPack?.getNameWithCompletion()}</Text>
                     </View>
                     <IconButton style={{flex: 1, alignItems: 'flex-end'}} icon={neighbourVerseChunks?.next && Images.next} iconPosition='end' tintColor={Colors.darkgray} size={6}  hitslop={hitslop()} onPress={()=>setCurrent(neighbourVerseChunks?.next?.id, currentPack.id)}>
-                        <Text style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginRight: 7, marginBottom: 2}}>{neighbourVerseChunks?.next?.toString()}</Text>
+                        <Text  allowFontScaling={false} style={{...Fonts.primary, ...Fonts.small, color: Colors.darkgray, marginRight: 7, marginBottom: 2}}>{neighbourVerseChunks?.next?.toString()}</Text>
                     </IconButton>
                 </View>
                 <View
@@ -220,7 +220,7 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                     <View style={{position: 'absolute', top: 0, left: 0, right: 0, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.1, shadowColor: Colors.black, shadowRadius: 10, borderTopStartRadius: 30, borderTopEndRadius: 30, height: 100, backgroundColor: 'white'}}/>
                     <View style={{position: 'absolute', top: 100, left: 0, right: 0, height: 100, backgroundColor: 'white'}}/>
                     <View style={{ flexDirection: 'row', height: 30 }}>
-                        <Text style={{ ...Fonts.h2 }}>{verseChunkTitle(currentVerseChunk)}</Text>
+                        <Text allowFontScaling={false} style={{ ...Fonts.h2 }}>{verseChunkTitle(currentVerseChunk)}</Text>
                         <View style={{ flex: 1 }} />
                         <TouchableOpacity hitSlop={hitslop()} style={{ width: 22, height: 22 }} onPress={togglePeek}>
                             <Image style={{ tintColor: Colors.black, height: '100%', width: '100%' }} resizeMode="contain" source={isPeeking ? Images.eye_off : Images.eye} />
@@ -258,7 +258,7 @@ const MemoryScreen = ({ navigation, currentVerseChunk, completeCurrentVerseChunk
                         </TouchableOpacity>
                         <View style={{ flex: 1 }} />
                         <TouchableOpacity hitSlop={hitslop()} style={{ height: 18, borderRadius: 12, borderWidth: 1, paddingHorizontal: 20, justifyContent: 'center', width: 92}} onPress={toggleMode}>
-                            <Text style={{...Fonts.primary, ...Fonts.small, lineHeight: 18, textAlign: 'center'}}>{capitaliseFirst(mode)}</Text>
+                            <Text  allowFontScaling={false} style={{...Fonts.primary, ...Fonts.small, lineHeight: 18, textAlign: 'center'}}>{capitaliseFirst(mode)}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

@@ -40,9 +40,9 @@ const MemoryPacksScreen = ({ navigation, setCurrent, memoryPacks, deleteMemoryPa
         <SafeAreaView style={{flex: 1}} forceInset={{bottom: 'always', top: 'never'}}>
             <View style={{flex: 1}}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, paddingBottom: 0}}>
-                    <Text style={{...Fonts.h1}}>Memory Packs</Text>
+                    <Text allowFontScaling={false} style={{...Fonts.h1}}>Memory Packs</Text>
                     <TouchableOpacity style={{height: '100%', width: 22}} onPress={onCreateMemoryPackPressed}>
-                        <Text style={{fontSize: 30}}>+</Text>
+                        <Text allowFontScaling={false} style={{fontSize: 30}}>+</Text>
                     </TouchableOpacity>
                 </View>
                 <SwipableList 

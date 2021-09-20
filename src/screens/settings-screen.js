@@ -10,7 +10,7 @@ export const SettingsScreen = (params) => {
     return <SafeAreaView style={{flex: 1}} forceInset={{bottom: 'always', top: 'never'}}>
         <View style={{ flex: 1, padding: 20 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', height: headerHeight }}>
-                <Text style={{ ...Fonts.h1, lineHeight: headerHeight, color: Colors.black }}>Settings</Text>
+                <Text allowFontScaling={false} style={{ ...Fonts.h1, lineHeight: headerHeight, color: Colors.black }}>Settings</Text>
                 <View style={{ flex: 1 }} />
             </View>
         </View>

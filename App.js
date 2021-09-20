@@ -11,8 +11,10 @@ import MemoryPacksScreen from './src/screens/memory-packs-screen';
 import AddMemoryPackScreen from './src/screens/add-memory-pack-screen';
 import EditMemoryPackScreen from './src/screens/edit-memory-pack-screen';
 import { SettingsScreen } from './src/screens/settings-screen';
+import { Text } from 'react-native';
 
 const RootStack = createNativeStackNavigator();
+Text.allowFontScaling = false;
 
 const App = () => {
   return (

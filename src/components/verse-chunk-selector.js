@@ -78,7 +78,7 @@ class VerseChunkSelector extends React.Component{
                     placeholder="Chapter" 
                     keyboardType="number-pad" 
                     returnKeyType="done"
-                    style={{width: 45}} 
+                    style={{width: 48}} 
                     onChangeText={(text)=>this.onTextInputChange('chapter', text)}
                     onSubmitEditing={()=>this.verseStartTextInput.focus()}
                     />

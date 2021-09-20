@@ -43,10 +43,10 @@ const AddVerseChunkScreen = ({ navigation, currentBible, addVerseChunk}) => {
         <SafeAreaView style={{flex: 1}} forceInset={{bottom: 'always', top: 'never'}}>
             <View style={{flex: 1, padding: 20}}>
                 <View style={{flexDirection: 'row', alignItems: 'center', height: headerHeight}}>
-                    <Text style={{...Fonts.h1, lineHeight: headerHeight, color: Colors.black}}>Commit a verse</Text>
+                    <Text allowFontScaling={false} style={{...Fonts.h1, lineHeight: headerHeight, color: Colors.black}}>Commit a verse</Text>
                     <View style={{flex: 1}}/>
                     <TouchableOpacity style={{height: headerHeight, justifyContent: 'center', marginTop: 4}} onPress={onPressAdd}>
-                        <Text style={{...Fonts.large, ...Fonts.primary, color: '#538862', lineHeight: headerHeight}}>Add</Text>
+                        <Text  allowFontScaling={false} style={{...Fonts.large, ...Fonts.primary, color: '#538862', lineHeight: headerHeight}}>Add</Text>
                     </TouchableOpacity>
                 </View>
                 <ScrollView style={{flex: 1}}>

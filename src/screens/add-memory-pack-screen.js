@@ -72,10 +72,10 @@ const AddMemoryPackScreen = ({ navigation, currentBible, addMemoryPack, packName
             <View style={{flex: 1}}>
                 <View style={{flex: 1, padding: 20}}>
                     <View style={{flexDirection: 'row', alignItems: 'center', height: headerHeight}}>
-                        <Text style={{...Fonts.h1, lineHeight: headerHeight, color: Colors.black}}>Create Memory Pack</Text>
+                        <Text allowFontScaling={false} style={{...Fonts.h1, lineHeight: headerHeight, color: Colors.black}}>Create Memory Pack</Text>
                         <View style={{flex: 1}}/>
                         <TouchableOpacity style={{height: headerHeight, justifyContent: 'center', marginTop: 4}} onPress={onPressAdd}>
-                            <Text style={{...Fonts.large, ...Fonts.primary, color: '#538862', lineHeight: headerHeight}}>Add</Text>
+                            <Text allowFontScaling={false} style={{...Fonts.large, ...Fonts.primary, color: '#538862', lineHeight: headerHeight}}>Add</Text>
                         </TouchableOpacity>
                     </View>
                     <ScrollView>
@@ -100,7 +100,7 @@ const AddMemoryPackScreen = ({ navigation, currentBible, addMemoryPack, packName
                     <View style={{position: 'absolute', top: 0, left: 0, right: 0, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.1, shadowColor: Colors.black, shadowRadius: 10, borderTopStartRadius: 30, borderTopEndRadius: 30, height: 100, backgroundColor: 'white'}}/>
                     <View style={{position: 'absolute', top: 100, left: 0, right: 0, height: 240, backgroundColor: 'white'}}/>
                     <View style={{ flexDirection: 'row', padding: 20, paddingBottom: 0, alignItems: 'center'}}>
-                        <Text style={{ ...Fonts.h2 }}>add verse to pack</Text>
+                        <Text  allowFontScaling={false} style={{ ...Fonts.h2 }}>add verse to pack</Text>
                         <View style={{ flex: 1 }} />
                         <TouchableOpacity style={{height: 24, width: 24}} hitSlop={hitslop()} onPress={onPressAddVerseChunk}>
                             <Image source={Images.add} style={{flex: 1, tintColor: 'black', width: '100%'}} resizeMode='contain'/>

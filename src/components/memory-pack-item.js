@@ -7,6 +7,7 @@ import Fonts from '../constants/fonts';
 import Images from '../constants/images';
 import { loadVerseChunkData, verseChunkStringData, verseChunkTitle } from '../helpers/verse-helper';
 import { sortedVerseChunkListByCreateDate } from '../redux/verse-chunk/verse-chunk-selectors';
+import { CompletionTag } from './completion-tag';
 
 const capsuleHeight = 18;
 const MemoryPackItem = ({
@@ -21,10 +22,7 @@ const MemoryPackItem = ({
         <View style={{paddingVertical: 12, paddingHorizontal: 20, backgroundColor: 'white'}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Text style={{ ...Fonts.alternate, ...Fonts.small }}>{memoryPack.getNameWithCompletion()}</Text>
-                <View style={{height: capsuleHeight, borderRadius: capsuleHeight/2, borderWidth: 1.2, borderColor: isComplete ? Colors.darkgreen : Colors.gray, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8, flexDirection: 'row'}}>
-                    <Text style={{ ...Fonts.alternate, ...Fonts.verysmall, color: isComplete ? Colors.darkgreen : Colors.gray}}>{isComplete ? moment(memoryPack.getCompletionDate()).format('DD/MM/YY') : 'Incomplete'}</Text>
-                    {isComplete && <Image source={Images.tick} style={{tintColor: Colors.darkgreen, resizeMode: 'contain', height: capsuleHeight/2, width: capsuleHeight/2, marginLeft: 4}}/>}
-                </View>
+                <CompletionTag completionDate={memoryPack.getCompletionDate()}/>
             </View>
             <View style={{marginTop: 4}}>
                 {verseChunksList.map((verseChunk, i)=><View key={`${i}`} style={{marginTop: 8, paddingLeft: 14}}>
